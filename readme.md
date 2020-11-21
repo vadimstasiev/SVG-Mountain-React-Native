@@ -54,16 +54,16 @@ when u create an accout that returns a promise, we can use the uuid from the ret
 
 ```json
 {
-    uuid: ....,
-    email: ....,
-    mood_tracker: {
-        ...
+    "uuid": "...",
+    "email": "...",
+    "mood_tracker": {
+        "..."
     },
-    habit_tracker: {
-        ...
+    "habit_tracker": {
+        "..."
     },
-    journal: {
-        ...
+    "journal": {
+        "..."
     }
 }
 ```
