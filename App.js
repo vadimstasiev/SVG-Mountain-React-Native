@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import auth from "@react-native-firebase/auth";
+
+import { Container, Text, Button, Content } from "native-base";
+import * as Font from "expo-font";
 
 function App() {
   // Set an initializing state whilst Firebase connects
@@ -31,6 +34,27 @@ function App() {
   return (
     <View>
       <Text>Welcome {user.email}</Text>
+      <Button block light>
+        <Text>Light</Text>
+      </Button>
+      <Button block>
+        <Text>Primary</Text>
+      </Button>
+      <Button block success>
+        <Text>Success</Text>
+      </Button>
+      <Button block info>
+        <Text>Info</Text>
+      </Button>
+      <Button block warning>
+        <Text>Warning</Text>
+      </Button>
+      <Button block danger>
+        <Text>Danger</Text>
+      </Button>
+      <Button block dark>
+        <Text>Dark</Text>
+      </Button>
     </View>
   );
 }
