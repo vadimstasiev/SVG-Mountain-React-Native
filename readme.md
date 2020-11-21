@@ -1,5 +1,6 @@
 # prerequisites
 
+- https://reactnative.dev/docs/environment-setup
 - npm install
 - yarn install
 - cd android 
