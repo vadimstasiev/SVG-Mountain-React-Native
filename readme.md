@@ -22,31 +22,33 @@ npx react-native run-android
 - write notes for everything
 # whenever you push you dont add yarn.lock package-lock or package 
 
+(full checkbox = ✅)
+
 # Tasks
 
 - Login (VADIM)
-    - [  ]  Register
-    - [  ]  Persistent Auth
-    - [  ]  Login/Signout
+    ⬜️  Register
+    ⬜️  Persistent Auth
+    ⬜️  Login/Signout
 
 - Mood tracker (MARIAN)
-    - [  ]  create page
-    - [  ]  create functionality to color
-    - [  ]  save to db
-    - [  ]  autopopulate svg 
-    - [  ]  save the svg in gallery 
+    ⬜️  create page
+    ⬜️  create functionality to color
+    ⬜️  save to db
+    ⬜️  autopopulate svg 
+    ⬜️  save the svg in gallery 
 
 - habit tracker (MARIAN)
-    - [  ]  create page
-    - [  ]  create tick functionality
-    - [  ]  save to db
-    - [  ]  autopopulate svg 
+    ⬜️  create page
+    ⬜️  create tick functionality
+    ⬜️  save to db
+    ⬜️  autopopulate svg 
 
 - journal (VADIM)
-    - [  ]  create page
-    - [  ]  create functionality
-    - [  ]  save to db
-    - [  ]  autopopulate svg 
+    ⬜️  create page
+    ⬜️  create functionality
+    ⬜️  save to db
+    ⬜️  autopopulate svg 
 
 
 # DB STRUCTURE
@@ -54,16 +56,16 @@ when u create an accout that returns a promise, we can use the uuid from the ret
 
 ```json
 {
-    "uuid": "...",
-    "email": "...",
-    "mood_tracker": {
-        "..."
+    uuid: ....,
+    email: ....,
+    mood_tracker: {
+        ...
     },
-    "habit_tracker": {
-        "..."
+    habit_tracker: {
+        ...
     },
-    "journal": {
-        "..."
+    journal: {
+        ...
     }
 }
 ```
