@@ -24,7 +24,7 @@ npx react-native run-android
 
 - Login 
     - Register
-    - Persistent Login
+    - Persistent Auth
     - Login/Signout
 
 - Mood tracker 
