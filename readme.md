@@ -27,28 +27,28 @@ npx react-native run-android
 # Tasks
 
 - Login (VADIM)
-    ⬜️  Register
-    ⬜️  Persistent Auth
-    ⬜️  Login/Signout
+    - ⬜️  Register
+    - ⬜️  Persistent Auth
+    - ⬜️  Login/Signout
 
 - Mood tracker (MARIAN)
-    ⬜️  create page
-    ⬜️  create functionality to color
-    ⬜️  save to db
-    ⬜️  autopopulate svg 
-    ⬜️  save the svg in gallery 
+    - ⬜️  create page
+    - ⬜️  create functionality to color
+    - ⬜️  save to db
+    - ⬜️  autopopulate svg 
+    - ⬜️  save the svg in gallery 
 
 - habit tracker (MARIAN)
-    ⬜️  create page
-    ⬜️  create tick functionality
-    ⬜️  save to db
-    ⬜️  autopopulate svg 
+    - ⬜️  create page
+    - ⬜️  create tick functionality
+    - ⬜️  save to db
+    - ⬜️  autopopulate svg 
 
 - journal (VADIM)
-    ⬜️  create page
-    ⬜️  create functionality
-    ⬜️  save to db
-    ⬜️  autopopulate svg 
+    - ⬜️  create page
+    - ⬜️  create functionality
+    - ⬜️  save to db
+    - ⬜️  autopopulate svg 
 
 
 # DB STRUCTURE
