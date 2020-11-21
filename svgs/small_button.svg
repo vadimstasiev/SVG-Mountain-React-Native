@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 378.67 91">
+  <title>small_button</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="button">
+      <g id="button-2" data-name="button">
+        <rect width="378.42" height="91" rx="45.5" style="fill: #fff"/>
+        <path d="M45.5,86A40.53,40.53,0,0,1,45.5,5H332.92a40.53,40.53,0,0,1,0,81.06Z" style="fill: #eaeaea"/>
+        <path d="M378.67,45.5A45.65,45.65,0,0,1,333.17,91H45.75A45.63,45.63,0,0,1,.25,45.5v-.24A45.67,45.67,0,0,0,45.25,84H332.67a45.63,45.63,0,0,0,45.5-45.26A45.14,45.14,0,0,1,378.67,45.5Z" style="opacity: 0.13"/>
+      </g>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186 215">
+  <title>plus</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="habit_tracker" data-name="habit tracker">
+      <rect width="186" height="215" rx="12" style="fill: #e2beb9"/>
+      <g>
+        <line x1="93" y1="47" x2="93" y2="168" style="fill: #95645d;stroke: #95645d;stroke-miterlimit: 10;stroke-width: 20px"/>
+        <line x1="32.5" y1="107.5" x2="153.5" y2="107.5" style="fill: #95645d;stroke: #95645d;stroke-miterlimit: 10;stroke-width: 20px"/>
+      </g>
+    </g>
+  </g>
+</svg>

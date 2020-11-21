@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 186.57 97.19">
+  <title>arrow</title>
+  <g id="Layer_2" data-name="Layer 2">
+    <g id="Menu_Page" data-name="Menu Page">
+      <g>
+        <line x1="186.57" y1="48.59" y2="48.59" style="fill: #95645d"/>
+        <g>
+          <line x1="144.51" y1="48.59" y2="48.59" style="fill: none;stroke: #95645d;stroke-miterlimit: 10;stroke-width: 8px"/>
+          <polygon points="137.99 97.19 137.99 0 186.57 48.59 137.99 97.19" style="fill: #95645d"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
