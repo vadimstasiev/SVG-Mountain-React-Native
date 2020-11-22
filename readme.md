@@ -33,8 +33,10 @@ npx react-native run-android
     - ⬜️  Login/Signout
 
 - Mood tracker (MARIAN)
-    - ⬜️  create page
+    - ⬜️  create page 
+        IN PROGRESS...
     - ⬜️  create functionality to color
+        IN PROGRESS...
     - ⬜️  save to db
     - ⬜️  autopopulate svg 
     - ⬜️  save the svg in gallery 
