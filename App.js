@@ -26,14 +26,16 @@ import Svg, {
 } from "react-native-svg";
 
 function Mountain() {
+  const [color, useColor] = useState("#ccc");
   return (
     <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1023 1284.5">
       <G data-name="Layer 2">
         <G data-name="mood tracker">
           <Path
-            fill="#ccc"
+            fill={color}
             stroke="#000"
-            onPress={() => alert("fucku")}
+            id="test"
+            onPress={() => useColor("red")}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3}

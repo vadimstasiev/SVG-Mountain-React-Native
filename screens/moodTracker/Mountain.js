@@ -33,7 +33,9 @@ function Mountain() {
           <Path
             fill="#ccc"
             stroke="#000"
-            onPress={() => alert("fucku")}
+            onPress={() => {
+              console.log("here", this);
+            }}
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth={3}
