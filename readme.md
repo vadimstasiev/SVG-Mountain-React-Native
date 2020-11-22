@@ -26,6 +26,7 @@ npx react-native run-android
 
 # Tasks
 
+- Main page
 - Login (VADIM)
     - ⬜️  Register
     - ⬜️  Persistent Auth
