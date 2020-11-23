@@ -23,32 +23,6 @@ function HomeScreen({navigation}) {
 
 function LoginScreen({navigation}) {
   return (
-    // <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-    //   <Text>Login Screen</Text>
-    //   <Button block light onPress={() => navigation.navigate('Home')}>
-    //     <Text>Go Home</Text>
-    //   </Button>
-      
-      
-    //   <Form>
-    //     <Item fixedLabel>
-    //       <Label>Username</Label>
-    //       <Input />
-    //     </Item>
-    //     <Item fixedLabel last>
-    //       <Label>Password</Label>
-    //       <Input />
-    //     </Item>
-        // <Button block info onPress={()=>{}}>
-        //   <Text>Login</Text>
-        // </Button>
-    //   </Form>
-
-      // <Button block info onPress={()=>{() => navigation.navigate('Register')}}>
-      //   <Text>Click to register instead</Text>
-      // </Button>
-    // </View>
-
     <Container>
         <Header />
         <Content>
@@ -72,22 +46,42 @@ function LoginScreen({navigation}) {
 }
 
 function RegisterScreen({navigation}) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const registerUser =()=>{
+    auth()
+      .createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+      })
+      .catch(error => {
+        if (error.code === 'auth/email-already-in-use') {
+          console.log('That email address is already in use!');
+        }
+
+        if (error.code === 'auth/invalid-email') {
+          console.log('That email address is invalid!');
+        }
+        console.error(error);
+      });
+  }
   return (
     <Container>
       <Header />
       <Content>
         <Form>
           <Item>
-            <Input placeholder="Email" />
+            <Input placeholder="Email" onChangeText={email=> {setEmail(email)}}/>
           </Item>
           <Item last>
-            <Input placeholder="Password" />
+            <Input placeholder="Password" onChangeText={password=> {setPassword(password)}} />
           </Item>
           <Item last>
-            <Input placeholder="Confirm Password" />
+            <Input placeholder="Confirm Password" onChangeText={confirmPassword=> {setConfirmPassword(confirmPassword)}}/>
           </Item>
         </Form>
-        <Button block info onPress={()=>{}}>
+        <Button block info onPress={registerUser}>
           <Text>Register</Text>
         </Button>
         <Button block info onPress={() => navigation.navigate('Login')}>
@@ -97,7 +91,6 @@ function RegisterScreen({navigation}) {
     </Container>
   );
 }
-
 
 const Stack = createStackNavigator();
 
