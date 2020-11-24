@@ -7,6 +7,13 @@ import 'react-native-gesture-handler';
 import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon } from "native-base";
 import * as Font from "expo-font";
 
+import {
+  TextField,
+  FilledTextField,
+  OutlinedTextField,
+} from 'react-native-material-textfield';
+
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
