@@ -19,6 +19,7 @@
     "expo-status-bar": "~1.0.2",
     "expo-updates": "~0.3.2",
     "native-base": "^2.13.14",
+    "prettier": "^2.2.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "~0.63.3",
