@@ -21,6 +21,14 @@ yarn start
 - before merging to main if there is a merge request the other party must review it
 - write notes for everything
 
+# Patches - Hot-patching dependencies with patch-package
+
+- http://johnliu.net/blog/2018/12/hot-patching-our-dependencies-with-patch-package
+
+This is configured to run after yarn install the configuration is inside package.json in the scripts section: `"postinstall": "patch-package"`
+
+Right after yarn install the project must be ran once which might result in a crash, this is likely caused by the patch package module, which might not be patching in time, if that's the case just run the project again and from thereon there shouldn't be any problems
+
 # whenever you push you dont add yarn.lock package-lock or package
 
 (full checkbox = ✅)
