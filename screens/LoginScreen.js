@@ -42,6 +42,7 @@ let defaults = {
 };
 
 class LoginScreen extends Component {
+ 
     constructor(props) {
         super(props);
 
