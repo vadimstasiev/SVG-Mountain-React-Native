@@ -20,29 +20,11 @@ const Stack = createStackNavigator();
 
 const App = () => {
 
-  // Set an initializing state whilst Firebase connects
-  const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
-
-  // Handle user state changes
-  function onAuthStateChanged(user) {
-    setUser(user);
-    if (initializing) setInitializing(false);
-  }
-
-  useEffect(() => {
-    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-    return subscriber; // unsubscribe on unmount
-  }, []);
-
-  // could return a loading screen instead
-  if (initializing) return null; 
-
   return (
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home"  screenOptions={{title: 'JournaliZZe'}}>
           <Stack.Screen name="Home">
-            {props => <HomeScreen {...props} user={user} extraData={{}} />}
+            {props => <HomeScreen {...props} extraData={{}} />}
           </Stack.Screen>
           <Stack.Screen name="Login">
             {props => <LoginScreen {...props} extraData={{}} />}

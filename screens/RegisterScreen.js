@@ -144,7 +144,10 @@ class RegisterScreen extends Component {
         if(Object.keys(errors).length === 0){
           await auth()
           .createUserWithEmailAndPassword(this['email'].value(), this['password'].value())
-          .then(() => {
+          .then(async() => {
+            await auth().currentUser.updateProfile({
+                displayName: this['firstname'].value()
+            })
             this.navigation.navigate('Home');
           })
           .catch(error => {
@@ -155,7 +158,6 @@ class RegisterScreen extends Component {
             if (error.code === 'auth/invalid-email') {
               errors['email'] = "Invalid format";
             }
-            console.log(error.code);
           });
         }
         this.setState({ errors });
