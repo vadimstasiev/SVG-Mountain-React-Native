@@ -2,13 +2,17 @@
 
 - https://reactnative.dev/docs/environment-setup
 
-- yarn install
+- `yarn install`
 
 # run
 
 (might be necessary to run a second time if it crashes the first time)
 
-yarn start
+- `yarn start`
+
+# generate apk
+
+- `yarn release`
 
 # docs
 

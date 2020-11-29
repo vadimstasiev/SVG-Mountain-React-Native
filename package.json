@@ -6,7 +6,8 @@
     "web": "expo start --web",
     "start": "react-native run-android",
     "test": "jest",
-    "postinstall": "patch-package"
+    "postinstall": "patch-package",
+    "release": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-community/masked-view": "^0.1.10",
