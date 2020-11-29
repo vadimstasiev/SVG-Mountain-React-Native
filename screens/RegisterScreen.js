@@ -143,22 +143,22 @@ class RegisterScreen extends Component {
         }
         if(Object.keys(errors).length === 0){
           await auth()
-          .createUserWithEmailAndPassword(this['email'].value(), this['password'].value())
-          .then(async() => {
-            await auth().currentUser.updateProfile({
-                displayName: this['firstname'].value()
+            .createUserWithEmailAndPassword(this['email'].value(), this['password'].value())
+            .then(async() => {
+              await auth().currentUser.updateProfile({
+                  displayName: this['firstname'].value()
+              })
+              this.navigation.navigate('Home');
             })
-            this.navigation.navigate('Home');
-          })
-          .catch(error => {
-            if (error.code === 'auth/email-already-in-use') {
-              errors['email'] = 'Email already in use';
-            }
-            
-            if (error.code === 'auth/invalid-email') {
-              errors['email'] = "Invalid format";
-            }
-          });
+            .catch(error => {
+              if (error.code === 'auth/email-already-in-use') {
+                errors['email'] = 'Email already in use';
+              }
+              
+              if (error.code === 'auth/invalid-email') {
+                errors['email'] = "Invalid format";
+              }
+            });
         }
         this.setState({ errors });
     }

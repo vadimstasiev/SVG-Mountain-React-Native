@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import auth from "@react-native-firebase/auth";
+
 import {
   ScrollView,
   View,
@@ -39,16 +41,15 @@ class LoginScreen extends Component {
  
     constructor(props) {
         super(props);
+        this.navigation = props.navigation;
 
         this.onFocus = this.onFocus.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onChangeText = this.onChangeText.bind(this);
-        this.onSubmitFirstName = this.onSubmitFirstName.bind(this);
         this.onSubmitEmail = this.onSubmitEmail.bind(this);
         this.onSubmitPassword = this.onSubmitPassword.bind(this);
         this.onAccessoryPress = this.onAccessoryPress.bind(this);
 
-        this.firstnameRef = this.updateRef.bind(this, 'firstname');
         this.emailRef = this.updateRef.bind(this, 'email');
         this.passwordRef = this.updateRef.bind(this, 'password');
 
@@ -76,7 +77,7 @@ class LoginScreen extends Component {
     }
 
     onChangeText(text) {
-        ['firstname', 'email', 'password']
+        ['email', 'password']
         .map((name) => ({ name, ref: this[name] }))
         .forEach(({ name, ref }) => {
             if (ref.isFocused()) {
@@ -89,11 +90,6 @@ class LoginScreen extends Component {
         this.setState(({ secureTextEntry }) => ({ secureTextEntry: !secureTextEntry }));
     }
 
-    onSubmitFirstName() {
-        this.email.focus();
-    }
-
-
     onSubmitEmail() {
         this.password.focus();
     }
@@ -102,21 +98,31 @@ class LoginScreen extends Component {
         this.password.blur();
     }
 
-    onSubmit() {
+    async onSubmit() {
         let errors = {};
 
-        ['firstname', 'email', 'password']
+        ['email', 'password']
         .forEach((name) => {
             let value = this[name].value();
-
             if (!value) {
-            errors[name] = 'Should not be empty';
-            } else {
-            if ('password' === name && value.length < 6) {
-                errors[name] = 'Too short';
-            }
-            }
+                errors[name] = 'Should not be empty';
+            } 
         });
+
+        await auth().signInWithEmailAndPassword(this['email'].value(), this['password'].value())
+            .then(() => {
+                this.navigation.navigate('Home');
+            })
+            .catch((error) => {
+                if (error.code === 'auth/user-not-found') {
+                    errors['email'] = 'Email not found';
+                }
+                
+                if (error.code === 'auth/wrong-password') {
+                    errors['password'] = "Wrong Password";
+                }
+                console.log(error.code);
+            });
 
         this.setState({ errors });
     }
@@ -145,7 +151,6 @@ class LoginScreen extends Component {
 
     render() {
         let { errors = {}, secureTextEntry, ...data } = this.state;
-        let { firstname, lastname } = data;
 
         return (
         <SafeAreaView style={styles.safeContainer}>
@@ -155,17 +160,7 @@ class LoginScreen extends Component {
             keyboardShouldPersistTaps='handled'
             >
             <View style={styles.container}>
-                <TextField
-                ref={this.firstnameRef}
-                autoCorrect={false}
-                enablesReturnKeyAutomatically={true}
-                onFocus={this.onFocus}
-                onChangeText={this.onChangeText}
-                onSubmitEditing={this.onSubmitFirstName}
-                returnKeyType='next'
-                label='First Name'
-                error={errors.firstname}
-                />
+
 
 
                 <TextField
