@@ -46,18 +46,22 @@ class RegisterScreen extends Component {
         this.onSubmitFirstName = this.onSubmitFirstName.bind(this);
         this.onSubmitEmail = this.onSubmitEmail.bind(this);
         this.onSubmitPassword = this.onSubmitPassword.bind(this);
-        this.onAccessoryPress = this.onAccessoryPress.bind(this);
+        this.onSubmitConfirmPassword = this.onSubmitConfirmPassword.bind(this);
+        this.onAccessory1Press = this.onAccessory1Press.bind(this);
+        this.onAccessory2Press = this.onAccessory2Press.bind(this);
 
         this.firstnameRef = this.updateRef.bind(this, 'firstname');
         this.emailRef = this.updateRef.bind(this, 'email');
         this.passwordRef = this.updateRef.bind(this, 'password');
+        this.confirmPasswordRef = this.updateRef.bind(this, 'confirmPassword');
 
 
-        this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
+        this.renderPasswordAccessory1 = this.renderPasswordAccessory1.bind(this);
+        this.renderPasswordAccessory2 = this.renderPasswordAccessory2.bind(this);
 
         this.state = {
-        secureTextEntry: true,
-     
+        secureTextEntry1: true,
+        secureTextEntry2: true,
         };
     }
 
@@ -76,7 +80,7 @@ class RegisterScreen extends Component {
     }
 
     onChangeText(text) {
-        ['firstname', 'email', 'password']
+        ['firstname', 'email', 'password', 'confirmPassword']
         .map((name) => ({ name, ref: this[name] }))
         .forEach(({ name, ref }) => {
             if (ref.isFocused()) {
@@ -85,8 +89,12 @@ class RegisterScreen extends Component {
         });
     }
 
-    onAccessoryPress() {
-        this.setState(({ secureTextEntry }) => ({ secureTextEntry: !secureTextEntry }));
+    onAccessory1Press() {
+        this.setState(({ secureTextEntry1 }) => ({ secureTextEntry1: !secureTextEntry1 }));
+    }
+
+    onAccessory2Press() {
+      this.setState(({ secureTextEntry2 }) => ({ secureTextEntry2: !secureTextEntry2 }));
     }
 
     onSubmitFirstName() {
@@ -98,29 +106,38 @@ class RegisterScreen extends Component {
     }
 
     onSubmitPassword() {
-        this.password.blur();
+      this.confirmPassword.focus();
+    }
+
+    onSubmitConfirmPassword() {
+      this.confirmPassword.blur();
     }
 
     onSubmit() {
         let errors = {};
 
-        ['firstname', 'email', 'password']
+        ['firstname', 'email', 'password', 'confirmPassword']
         .forEach((name) => {
             let value = this[name].value();
 
             if (!value) {
             errors[name] = 'Should not be empty';
             } else {
-            if ('password' === name && value.length < 6) {
-                errors[name] = 'Too short';
-            } 
-            else if ('email' === name){
+            
+            if ('email' === name){
               if (! (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value))) {
                 errors[name] = "Invalid format";
               }
             }
+            if ('password' === name && value.length < 8) {
+              errors[name] = 'Too short';
+            }
           }
         });
+
+        if (this['password'].value() !== this['confirmPassword'].value()) {
+          errors['confirmPassword'] = 'Passwords don\'t match'
+        }
 
         this.setState({ errors });
     }
@@ -129,10 +146,10 @@ class RegisterScreen extends Component {
         this[name] = ref;
     }
 
-    renderPasswordAccessory() {
-        let { secureTextEntry } = this.state;
+    renderPasswordAccessory1() {
+        let { secureTextEntry1 } = this.state;
 
-        let name = secureTextEntry?
+        let name = secureTextEntry1?
         'visibility':
         'visibility-off';
 
@@ -141,14 +158,32 @@ class RegisterScreen extends Component {
             size={24}
             name={name}
             color={TextField.defaultProps.baseColor}
-            onPress={this.onAccessoryPress}
+            onPress={this.onAccessory1Press}
             suppressHighlighting={true}
         />
         );
     }
 
+    renderPasswordAccessory2() {
+      let { secureTextEntry2 } = this.state;
+
+      let name = secureTextEntry2?
+      'visibility':
+      'visibility-off';
+
+      return (
+      <MaterialIcon
+          size={24}
+          name={name}
+          color={TextField.defaultProps.baseColor}
+          onPress={this.onAccessory2Press}
+          suppressHighlighting={true}
+      />
+      );
+  }
+
     render() {
-        let { errors = {}, secureTextEntry, ...data } = this.state;
+        let { errors = {}, secureTextEntry1, secureTextEntry2, ...data } = this.state;
         let { firstname, lastname } = data;
 
         return (
@@ -188,7 +223,7 @@ class RegisterScreen extends Component {
 
                 <TextField
                 ref={this.passwordRef}
-                secureTextEntry={secureTextEntry}
+                secureTextEntry={secureTextEntry1}
                 autoCapitalize='none'
                 autoCorrect={false}
                 enablesReturnKeyAutomatically={true}
@@ -202,7 +237,26 @@ class RegisterScreen extends Component {
                 title='Choose wisely'
                 maxLength={30}
                 characterRestriction={20}
-                renderRightAccessory={this.renderPasswordAccessory}
+                renderRightAccessory={this.renderPasswordAccessory1}
+                />
+
+                <TextField
+                ref={this.confirmPasswordRef}
+                secureTextEntry={secureTextEntry2}
+                autoCapitalize='none'
+                autoCorrect={false}
+                enablesReturnKeyAutomatically={true}
+                clearTextOnFocus={false}
+                onFocus={this.onFocus}
+                onChangeText={this.onChangeText}
+                onSubmitEditing={this.onSubmitConfirmPassword}
+                returnKeyType='done'
+                label='Confirm Password'
+                error={errors.confirmPassword}
+                title='Choose wisely'
+                maxLength={30}
+                characterRestriction={20}
+                renderRightAccessory={this.renderPasswordAccessory2}
                 />
 
             </View>
