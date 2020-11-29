@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import auth from "@react-native-firebase/auth";
 import {
   ScrollView,
   View,
@@ -39,6 +40,8 @@ class RegisterScreen extends Component {
  
     constructor(props) {
         super(props);
+
+        this.navigation = props.navigation;
 
         this.onFocus = this.onFocus.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -138,7 +141,22 @@ class RegisterScreen extends Component {
         if (this['password'].value() !== this['confirmPassword'].value()) {
           errors['confirmPassword'] = 'Passwords don\'t match'
         }
-
+        if(Object.keys(errors).length === 0){
+          auth()
+          .createUserWithEmailAndPassword(this['email'].value(), this['password'].value())
+          .then(() => {
+            navigation.navigate('Home');
+          })
+          .catch(error => {
+            if (error.code === 'auth/email-already-in-use') {
+              errors['email'] = 'Email already in use'
+            }
+            
+            if (error.code === 'auth/invalid-email') {
+              errors['email'] = "Invalid format";
+            }
+          });
+        }
         this.setState({ errors });
     }
 
@@ -203,6 +221,7 @@ class RegisterScreen extends Component {
                 onSubmitEditing={this.onSubmitFirstName}
                 returnKeyType='next'
                 label='First Name'
+                title='Used name within the app'
                 error={errors.firstname}
                 />
 
@@ -235,8 +254,8 @@ class RegisterScreen extends Component {
                 label='Password'
                 error={errors.password}
                 title='Choose wisely'
-                maxLength={30}
-                characterRestriction={20}
+                maxLength={40}
+                characterRestriction={40}
                 renderRightAccessory={this.renderPasswordAccessory1}
                 />
 
@@ -254,8 +273,8 @@ class RegisterScreen extends Component {
                 label='Confirm Password'
                 error={errors.confirmPassword}
                 title='Choose wisely'
-                maxLength={30}
-                characterRestriction={20}
+                maxLength={40}
+                characterRestriction={40}
                 renderRightAccessory={this.renderPasswordAccessory2}
                 />
 

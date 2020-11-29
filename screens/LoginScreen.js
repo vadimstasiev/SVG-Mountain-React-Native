@@ -196,8 +196,8 @@ class LoginScreen extends Component {
                 label='Password'
                 error={errors.password}
                 title='Choose wisely'
-                maxLength={30}
-                characterRestriction={20}
+                maxLength={40}
+                characterRestriction={40}
                 renderRightAccessory={this.renderPasswordAccessory}
                 />
 
