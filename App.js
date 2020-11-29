@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, Button } from "react-native";
 
 import Svg, {
   Circle,
@@ -27,20 +27,39 @@ import Svg, {
 
 function Mountain() {
   const [color, useColor] = useState("#ccc");
+  // TODOS
+  // check how many days the month has 
+  // render the svg based on the number of months (remove polygons if necessary)
+  // create the mood - color array 
+
+  const polygons = [{
+    fill : "#ccc",
+    stroke : "#000",
+    id: "test",
+    strokeLinecap :"round",
+    strokeLinejoin : "round",
+    strokeWidth: 3,
+    location: "M309.18 547.4l224.32 79.1 99.96-150.47L487 436.5 309.18 547.4z"
+  }]
+
   return (
+    <View>
+  
     <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1023 1284.5">
       <G data-name="Layer 2">
-        <G data-name="mood tracker">
-          <Path
-            fill={color}
-            stroke="#000"
-            id="test"
-            onPress={() => useColor("red")}
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={3}
-            d="M309.18 547.4l224.32 79.1 99.96-150.47L487 436.5 309.18 547.4z"
-          />
+          <G data-name="mood tracker">
+          {polygons.map(i => {
+            return <Path
+              fill={color}
+              stroke={i.stroke}
+              key={i.id}
+              onPress={() => useColor("red")}
+              strokeLinecap={i.strokeLinecap}
+              strokeLinejoin={i.strokeLinejoin}
+              strokeWidth={i.strokeWidth}
+              d={i.location}
+            />
+          })}
           <Path
             fill="#fff"
             stroke="#000"
@@ -313,7 +332,8 @@ function Mountain() {
           </G>
         </G>
       </G>
-    </Svg>
+      </Svg>
+      </View>
   );
 }
 
