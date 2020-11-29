@@ -1,3 +1,12 @@
+diff --git a/node_modules/react-native-material-textfield/src/components/.vscode/settings.json b/node_modules/react-native-material-textfield/src/components/.vscode/settings.json
+new file mode 100644
+index 0000000..7a73a41
+--- /dev/null
++++ b/node_modules/react-native-material-textfield/src/components/.vscode/settings.json
+@@ -0,0 +1,2 @@
++{
++}
+\ No newline at end of file
 diff --git a/node_modules/react-native-material-textfield/src/components/affix/index.js b/node_modules/react-native-material-textfield/src/components/affix/index.js
 index 0f85022..7da0f1d 100644
 --- a/node_modules/react-native-material-textfield/src/components/affix/index.js
@@ -20,14 +29,23 @@ index 0f85022..7da0f1d 100644
      color: PropTypes.string.isRequired,
      fontSize: PropTypes.number.isRequired,
 diff --git a/node_modules/react-native-material-textfield/src/components/field/index.js b/node_modules/react-native-material-textfield/src/components/field/index.js
-index 494bbaa..09cd92d 100644
+index 494bbaa..075b59d 100644
 --- a/node_modules/react-native-material-textfield/src/components/field/index.js
 +++ b/node_modules/react-native-material-textfield/src/components/field/index.js
 @@ -221,6 +221,7 @@ export default class TextField extends PureComponent {
  
      let options = {
        toValue: this.focusState(),
-+	  useNativeDriver: false,
++	    useNativeDriver: false,
+       duration,
+     };
+ 
+@@ -233,7 +234,7 @@ export default class TextField extends PureComponent {
+ 
+     let options = {
+       toValue: this.labelState(),
+-      useNativeDriver: true,
++      useNativeDriver: false,
        duration,
      };
  
