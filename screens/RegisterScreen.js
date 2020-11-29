@@ -1,81 +1,224 @@
-import React, { useState, useEffect } from "react";
-
-import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon } from "native-base";
-import * as Font from "expo-font";
-
+import React, { Component } from 'react';
 import {
-  TextField,
-  FilledTextField,
-  OutlinedTextField,
-} from 'react-native-material-textfield';
+  ScrollView,
+  View,
+  SafeAreaView,
+  Platform,
+} from 'react-native';
+import { RaisedTextButton } from 'react-native-material-buttons';
+import { TextField } from 'react-native-material-textfield';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+
+let styles = {
+  scroll: {
+    backgroundColor: 'transparent',
+  },
+
+  container: {
+    margin: 8,
+    marginTop: Platform.select({ ios: 8, android: 32 }),
+    flex: 1,
+  },
+
+  contentContainer: {
+    padding: 8,
+  },
+
+  buttonContainer: {
+    paddingTop: 8,
+    margin: 8,
+  },
+
+  safeContainer: {
+    flex: 1,
+    backgroundColor: '#E8EAF6',
+  },
+};
+
+class RegisterScreen extends Component {
+ 
+    constructor(props) {
+        super(props);
+
+        this.onFocus = this.onFocus.bind(this);
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onChangeText = this.onChangeText.bind(this);
+        this.onSubmitFirstName = this.onSubmitFirstName.bind(this);
+        this.onSubmitEmail = this.onSubmitEmail.bind(this);
+        this.onSubmitPassword = this.onSubmitPassword.bind(this);
+        this.onAccessoryPress = this.onAccessoryPress.bind(this);
+
+        this.firstnameRef = this.updateRef.bind(this, 'firstname');
+        this.emailRef = this.updateRef.bind(this, 'email');
+        this.passwordRef = this.updateRef.bind(this, 'password');
 
 
-const RegisterScreen = ({navigation}) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const registerUser =()=>{
-      if (confirmPassword===password){
-        auth()
-        .createUserWithEmailAndPassword(email, password)
-        .then(() => {
-          console.log('User account created & signed in!');
-        })
-        .catch(error => {
-          if (error.code === 'auth/email-already-in-use') {
-            console.log('That email address is already in use!');
-          }
-          
-          if (error.code === 'auth/invalid-email') {
-            console.log('That email address is invalid!');
-          }
-          console.error(error);
+        this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
+
+        this.state = {
+        secureTextEntry: true,
+     
+        };
+    }
+
+    onFocus() {
+        let { errors = {} } = this.state;
+
+        for (let name in errors) {
+        let ref = this[name];
+
+        if (ref && ref.isFocused()) {
+            delete errors[name];
+        }
+        }
+
+        this.setState({ errors });
+    }
+
+    onChangeText(text) {
+        ['firstname', 'email', 'password']
+        .map((name) => ({ name, ref: this[name] }))
+        .forEach(({ name, ref }) => {
+            if (ref.isFocused()) {
+            this.setState({ [name]: text });
+            }
         });
-      }
     }
-    const validateEmail = () => {
-      if (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)) {
-        console.log("You have entered a valid email!")
-      } else {
-        console.log("You have entered an invalid email address!")
-      }
-    }
-    function checkPassword(e) { 
-      const PASSWORD_RULES=  /^[A-Za-z]\w{7,35}$/;
-      console.log(e.target.getNativeRef());
-      if (password.match(PASSWORD_RULES)) { 
-        console.log('valid password')
-        return true;
-      } else { 
-        console.log('Please enter a Password from 8 to 35 digits long')
-        return false;
-      }
-    }
-    return (
-      <Container>
-        <Header />
-        <Content>
-          <Form>
-            <Item>
-              <Input placeholder="Email" onChangeText={email=> {setEmail(email)}} onEndEditing={validateEmail}/>
-            </Item>
-            <Item last>
-              <Input placeholder="Password" onChangeText={password=> {setPassword(password)}} onEndEditing={checkPassword} />
-            </Item>
-            <Item last>
-              <Input placeholder="Confirm Password" onChangeText={confirmPassword=> {setConfirmPassword(confirmPassword)}}/>
-              {/* <Icon name='close-circle' /> */}
-            </Item>
-          </Form>
-          <Button block info onPress={registerUser}>
-            <Text>Register</Text>
-          </Button>
-          <Button block info onPress={() => navigation.navigate('Login')}>
-            <Text>Click to login instead</Text>
-          </Button>
-        </Content>
-      </Container>
-    );
-  }
 
-  export default RegisterScreen;
+    onAccessoryPress() {
+        this.setState(({ secureTextEntry }) => ({ secureTextEntry: !secureTextEntry }));
+    }
+
+    onSubmitFirstName() {
+        this.email.focus();
+    }
+
+    onSubmitEmail() {
+        this.password.focus();
+    }
+
+    onSubmitPassword() {
+        this.password.blur();
+    }
+
+    onSubmit() {
+        let errors = {};
+
+        ['firstname', 'email', 'password']
+        .forEach((name) => {
+            let value = this[name].value();
+
+            if (!value) {
+            errors[name] = 'Should not be empty';
+            } else {
+            if ('password' === name && value.length < 6) {
+                errors[name] = 'Too short';
+            } 
+            else if ('email' === name){
+              if (! (/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(value))) {
+                errors[name] = "Invalid format";
+              }
+            }
+          }
+        });
+
+        this.setState({ errors });
+    }
+
+    updateRef(name, ref) {
+        this[name] = ref;
+    }
+
+    renderPasswordAccessory() {
+        let { secureTextEntry } = this.state;
+
+        let name = secureTextEntry?
+        'visibility':
+        'visibility-off';
+
+        return (
+        <MaterialIcon
+            size={24}
+            name={name}
+            color={TextField.defaultProps.baseColor}
+            onPress={this.onAccessoryPress}
+            suppressHighlighting={true}
+        />
+        );
+    }
+
+    render() {
+        let { errors = {}, secureTextEntry, ...data } = this.state;
+        let { firstname, lastname } = data;
+
+        return (
+        <SafeAreaView style={styles.safeContainer}>
+            <ScrollView
+            style={styles.scroll}
+            contentContainerStyle={styles.contentContainer}
+            keyboardShouldPersistTaps='handled'
+            >
+            <View style={styles.container}>
+                <TextField
+                ref={this.firstnameRef}
+                autoCorrect={false}
+                enablesReturnKeyAutomatically={true}
+                onFocus={this.onFocus}
+                onChangeText={this.onChangeText}
+                onSubmitEditing={this.onSubmitFirstName}
+                returnKeyType='next'
+                label='First Name'
+                error={errors.firstname}
+                />
+
+
+                <TextField
+                ref={this.emailRef}
+                keyboardType='email-address'
+                autoCapitalize='none'
+                autoCorrect={false}
+                enablesReturnKeyAutomatically={true}
+                onFocus={this.onFocus}
+                onChangeText={this.onChangeText}
+                onSubmitEditing={this.onSubmitEmail}
+                returnKeyType='next'
+                label='Email Address'
+                error={errors.email}
+                />
+
+                <TextField
+                ref={this.passwordRef}
+                secureTextEntry={secureTextEntry}
+                autoCapitalize='none'
+                autoCorrect={false}
+                enablesReturnKeyAutomatically={true}
+                clearTextOnFocus={false}
+                onFocus={this.onFocus}
+                onChangeText={this.onChangeText}
+                onSubmitEditing={this.onSubmitPassword}
+                returnKeyType='done'
+                label='Password'
+                error={errors.password}
+                title='Choose wisely'
+                maxLength={30}
+                characterRestriction={20}
+                renderRightAccessory={this.renderPasswordAccessory}
+                />
+
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <RaisedTextButton
+                onPress={this.onSubmit}
+                title='submit'
+                color={TextField.defaultProps.tintColor}
+                titleColor='white'
+                />
+            </View>
+            </ScrollView>
+        </SafeAreaView>
+        );
+    }
+}
+
+export default RegisterScreen;
