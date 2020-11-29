@@ -1,93 +1,51 @@
-diff --git a/node_modules/react-native-material-textfield/src/components/.vscode/settings.json b/node_modules/react-native-material-textfield/src/components/.vscode/settings.json
-new file mode 100644
-index 0000000..7a73a41
---- /dev/null
-+++ b/node_modules/react-native-material-textfield/src/components/.vscode/settings.json
-@@ -0,0 +1,2 @@
-+{
-+}
-\ No newline at end of file
 diff --git a/node_modules/react-native-material-textfield/src/components/affix/index.js b/node_modules/react-native-material-textfield/src/components/affix/index.js
-index 0f85022..7da0f1d 100644
+index 0f85022..c12b3a6 100644
 --- a/node_modules/react-native-material-textfield/src/components/affix/index.js
 +++ b/node_modules/react-native-material-textfield/src/components/affix/index.js
-@@ -1,6 +1,6 @@
- import PropTypes from 'prop-types';
- import React, { PureComponent } from 'react';
--import { Animated } from 'react-native';
-+import { Animated, Text } from 'react-native';
- 
- import styles from './styles';
- 
 @@ -11,7 +11,7 @@ export default class Affix extends PureComponent {
  
    static propTypes = {
      numberOfLines: PropTypes.number,
 -    style: Animated.Text.propTypes.style,
-+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
++    style: PropTypes.object,
  
      color: PropTypes.string.isRequired,
      fontSize: PropTypes.number.isRequired,
 diff --git a/node_modules/react-native-material-textfield/src/components/field/index.js b/node_modules/react-native-material-textfield/src/components/field/index.js
-index 494bbaa..075b59d 100644
+index 494bbaa..9bbf2e2 100644
 --- a/node_modules/react-native-material-textfield/src/components/field/index.js
 +++ b/node_modules/react-native-material-textfield/src/components/field/index.js
 @@ -221,6 +221,7 @@ export default class TextField extends PureComponent {
  
      let options = {
        toValue: this.focusState(),
-+	    useNativeDriver: false,
-       duration,
-     };
- 
-@@ -233,7 +234,7 @@ export default class TextField extends PureComponent {
- 
-     let options = {
-       toValue: this.labelState(),
--      useNativeDriver: true,
 +      useNativeDriver: false,
        duration,
      };
  
 diff --git a/node_modules/react-native-material-textfield/src/components/helper/index.js b/node_modules/react-native-material-textfield/src/components/helper/index.js
-index 6060f9f..cbc362a 100644
+index 6060f9f..fe9d9c4 100644
 --- a/node_modules/react-native-material-textfield/src/components/helper/index.js
 +++ b/node_modules/react-native-material-textfield/src/components/helper/index.js
-@@ -1,6 +1,6 @@
- import PropTypes from 'prop-types';
- import React, { PureComponent } from 'react';
--import { Animated } from 'react-native';
-+import { Animated, Text , View} from 'react-native';
- 
- import styles from './styles';
- 
 @@ -11,7 +11,7 @@ export default class Helper extends PureComponent {
  
      disabled: PropTypes.bool,
  
 -    style: Animated.Text.propTypes.style,
-+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
++    style: PropTypes.object,
  
      baseColor: PropTypes.string,
      errorColor: PropTypes.string,
 diff --git a/node_modules/react-native-material-textfield/src/components/label/index.js b/node_modules/react-native-material-textfield/src/components/label/index.js
-index 82eaf03..26b742e 100644
+index 82eaf03..809fcdd 100644
 --- a/node_modules/react-native-material-textfield/src/components/label/index.js
 +++ b/node_modules/react-native-material-textfield/src/components/label/index.js
-@@ -1,6 +1,6 @@
- import PropTypes from 'prop-types';
- import React, { PureComponent } from 'react';
--import { Animated } from 'react-native';
-+import { Animated, Text } from 'react-native';
- 
- import styles from './styles';
- 
 @@ -43,7 +43,7 @@ export default class Label extends PureComponent {
        y1: PropTypes.number,
      }),
  
 -    style: Animated.Text.propTypes.style,
-+    style: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
++    style: PropTypes.object,
      label: PropTypes.string,
    };
  

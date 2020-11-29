@@ -1,0 +1,20 @@
+diff --git a/node_modules/react-native-material-buttons/src/components/button/index.js b/node_modules/react-native-material-buttons/src/components/button/index.js
+index 40d89e6..fc9a769 100644
+--- a/node_modules/react-native-material-buttons/src/components/button/index.js
++++ b/node_modules/react-native-material-buttons/src/components/button/index.js
+@@ -68,6 +68,7 @@ export default class Button extends PureComponent {
+       .timing(focusAnimation, {
+         toValue: 1,
+         duration: focusAnimationDuration,
++        useNativeDriver: true,
+         easing: Easing.out(Easing.ease),
+       })
+       .start();
+@@ -81,6 +82,7 @@ export default class Button extends PureComponent {
+       .timing(focusAnimation, {
+         toValue: 0,
+         duration: focusAnimationDuration,
++        useNativeDriver: true,
+         easing: Easing.out(Easing.ease),
+       })
+       .start();
