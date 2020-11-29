@@ -116,7 +116,7 @@ class RegisterScreen extends Component {
       this.confirmPassword.blur();
     }
 
-    onSubmit() {
+    async onSubmit() {
         let errors = {};
 
         ['firstname', 'email', 'password', 'confirmPassword']
@@ -142,19 +142,20 @@ class RegisterScreen extends Component {
           errors['confirmPassword'] = 'Passwords don\'t match'
         }
         if(Object.keys(errors).length === 0){
-          auth()
+          await auth()
           .createUserWithEmailAndPassword(this['email'].value(), this['password'].value())
           .then(() => {
-            navigation.navigate('Home');
+            this.navigation.navigate('Home');
           })
           .catch(error => {
             if (error.code === 'auth/email-already-in-use') {
-              errors['email'] = 'Email already in use'
+              errors['email'] = 'Email already in use';
             }
             
             if (error.code === 'auth/invalid-email') {
               errors['email'] = "Invalid format";
             }
+            console.log(error.code);
           });
         }
         this.setState({ errors });
