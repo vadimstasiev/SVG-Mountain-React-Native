@@ -38,9 +38,9 @@ Right after yarn install the project must be ran once which might result in a cr
 - Main page
 - Login (VADIM)
 
-  - ⬜️ Register
-  - ⬜️ Persistent Auth
-  - ⬜️ Login/Signout
+  - ✅ Register
+  - ✅ Persistent Auth
+  - ✅ Login/Signout
 
 - Mood tracker (MARIAN)
 
