@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import {
   ScrollView,
   View,
@@ -35,47 +35,49 @@ let styles = {
   },
 };
 
-class LoginScreen extends Component {
+const LoginScreen =()=> {
  
-    constructor(props) {
-        super(props);
+    // constructor(props) {
+    //     super(props);
 
-        this.onFocus = this.onFocus.bind(this);
-        this.onSubmit = this.onSubmit.bind(this);
-        this.onChangeText = this.onChangeText.bind(this);
-        this.onSubmitFirstName = this.onSubmitFirstName.bind(this);
-        this.onSubmitEmail = this.onSubmitEmail.bind(this);
-        this.onSubmitPassword = this.onSubmitPassword.bind(this);
-        this.onAccessoryPress = this.onAccessoryPress.bind(this);
+    //     this.onFocus = this.onFocus.bind(this);
+    //     this.onSubmit = this.onSubmit.bind(this);
+    //     this.onChangeText = this.onChangeText.bind(this);
+    //     this.onSubmitFirstName = this.onSubmitFirstName.bind(this);
+    //     this.onSubmitEmail = this.onSubmitEmail.bind(this);
+    //     this.onSubmitPassword = this.onSubmitPassword.bind(this);
+    //     this.onAccessoryPress = this.onAccessoryPress.bind(this);
 
-        this.firstnameRef = this.updateRef.bind(this, 'firstname');
-        this.emailRef = this.updateRef.bind(this, 'email');
-        this.passwordRef = this.updateRef.bind(this, 'password');
+    //     this.firstnameRef = this.updateRef.bind(this, 'firstname');
+    //     this.emailRef = this.updateRef.bind(this, 'email');
+    //     this.passwordRef = this.updateRef.bind(this, 'password');
 
 
-        this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
+    //     this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
 
-        this.state = {
-        secureTextEntry: true,
-     
-        };
+
+    // }
+
+    const [secureTextEntry, setSecureTextEntry] = useState(true);
+    const [errors, setErrors] = useState({});
+    const [firstname, setFirstname] = useState('')
+    // let { errors = {}, secureTextEntry, ...data } = this.state;
+    // let { firstname, lastname } = data;
+
+    const onFocus = ()=> {
+
+        for (let box in errors) {
+            if (box && box.isFocused()) {
+                setErrors(errors.filter((box)=>{
+                    box!==errors[box]
+                }));
+            }
+        }
+
+        setErrors({ errors });
     }
 
-    onFocus() {
-        let { errors = {} } = this.state;
-
-        for (let name in errors) {
-        let ref = this[name];
-
-        if (ref && ref.isFocused()) {
-            delete errors[name];
-        }
-        }
-
-        this.setState({ errors });
-    }
-
-    onChangeText(text) {
+    const onChangeText=(text)=> {
         ['firstname', 'email', 'password']
         .map((name) => ({ name, ref: this[name] }))
         .forEach(({ name, ref }) => {
@@ -85,24 +87,24 @@ class LoginScreen extends Component {
         });
     }
 
-    onAccessoryPress() {
-        this.setState(({ secureTextEntry }) => ({ secureTextEntry: !secureTextEntry }));
+    const onAccessoryPress= ()=> {
+        setSecureTextEntry(!secureTextEntry );
     }
 
-    onSubmitFirstName() {
+    const onSubmitFirstName=() =>{
         this.email.focus();
     }
 
 
-    onSubmitEmail() {
+    const onSubmitEmail=()=> {
         this.password.focus();
     }
 
-    onSubmitPassword() {
+    const onSubmitPassword=() =>{
         this.password.blur();
     }
 
-    onSubmit() {
+    const onSubmit = ()=> {
         let errors = {};
 
         ['firstname', 'email', 'password']
@@ -118,15 +120,14 @@ class LoginScreen extends Component {
             }
         });
 
-        this.setState({ errors });
+        setErrors({ errors });
     }
 
-    updateRef(name, ref) {
+    const updateRef=(name, ref)=> {
         this[name] = ref;
     }
 
-    renderPasswordAccessory() {
-        let { secureTextEntry } = this.state;
+    const renderPasswordAccessory=() =>{
 
         let name = secureTextEntry?
         'visibility':
@@ -143,9 +144,8 @@ class LoginScreen extends Component {
         );
     }
 
-    render() {
-        let { errors = {}, secureTextEntry, ...data } = this.state;
-        let { firstname, lastname } = data;
+
+
 
         return (
         <SafeAreaView style={styles.safeContainer}>
@@ -156,12 +156,12 @@ class LoginScreen extends Component {
             >
             <View style={styles.container}>
                 <TextField
-                ref={this.firstnameRef}
+                ref={firstnameRef}
                 autoCorrect={false}
                 enablesReturnKeyAutomatically={true}
-                onFocus={this.onFocus}
-                onChangeText={this.onChangeText}
-                onSubmitEditing={this.onSubmitFirstName}
+                onFocus={onFocus}
+                onChangeText={onChangeText}
+                onSubmitEditing={onSubmitFirstName}
                 returnKeyType='next'
                 label='First Name'
                 error={errors.firstname}
@@ -214,7 +214,7 @@ class LoginScreen extends Component {
             </ScrollView>
         </SafeAreaView>
         );
-    }
+    
 }
 
 export default LoginScreen;
