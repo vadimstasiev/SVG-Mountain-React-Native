@@ -173,7 +173,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M348.81 915.84l-36.83 264.38-65.94-159.78-136.33-90.51 239.1-14.09z"
+         "d":"M348.81 915.84l-36.83 264.38-65.94-159.78-136.33-90.51 239.1-14.09z",
+         "svg": {
+          "x":260,
+          "y":990,
+          "fill":"black"
+         }
       },
       {
          "id":17,
@@ -182,7 +187,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M348.81 915.84L441.5 771.5l13.22 317.57-105.91-173.23z"
+         "d":"M348.81 915.84L441.5 771.5l13.22 317.57-105.91-173.23z",
+         "svg": {
+          "x":400,
+          "y":940,
+          "fill":"black"
+         }
       },
       {
          "id":18,
@@ -191,7 +201,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M543.4 1008.3l135.36-32.72-102.05-191.25-33.31 138.28v85.69z"
+         "d":"M543.4 1008.3l135.36-32.72-102.05-191.25-33.31 138.28v85.69z",
+         "svg": {
+          "x":590,
+          "y":940,
+          "fill":"black"
+         }
       },
       {
          "id":19,
@@ -200,7 +215,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M576.71 784.33l102.05 191.25 165.9-40.11-267.95-151.14z"
+         "d":"M576.71 784.33l102.05 191.25 165.9-40.11-267.95-151.14z",
+         "svg": {
+          "x":710,
+          "y":930,
+          "fill":"black"
+         }
       },
       {
          "id":20,
@@ -209,7 +229,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M767.27 1175.36l77.39-239.89-301.26 72.83 223.87 167.06z"
+         "d":"M767.27 1175.36l77.39-239.89-301.26 72.83 223.87 167.06z",
+         "svg": {
+          "x":720,
+          "y":1060,
+          "fill":"black"
+         }
       },
       {
          "id":21,
@@ -218,7 +243,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M882.08 865.89l53.45 131.39-168.26 178.08 77.39-239.89 37.42-69.58z"
+         "d":"M882.08 865.89l53.45 131.39-168.26 178.08 77.39-239.89 37.42-69.58z",
+         "svg": {
+          "x":880,
+          "y":1000,
+          "fill":"black"
+         }
       },
       {
          "id":22,
@@ -227,7 +257,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M935.53 997.28L958.5 896.5l63 385h-164l78.03-284.22z"
+         "d":"M935.53 997.28L958.5 896.5l63 385h-164l78.03-284.22z",
+         "svg": {
+          "x":940,
+          "y":1230,
+          "fill":"black"
+         }
       },
       {
          "id":23,
@@ -236,7 +271,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M857.5 1281.5l-86.72 1.5-3.51-107.64 168.26-178.08-78.03 284.22z"
+         "d":"M857.5 1281.5l-86.72 1.5-3.51-107.64 168.26-178.08-78.03 284.22z",
+         "svg": {
+          "x":820,
+          "y":1230,
+          "fill":"black"
+         }
       },
       {
          "id":24,
@@ -245,7 +285,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M676.76 1107.82l90.12 67.37 4.45 107.79-150.1-2.99 55.53-172.17z"
+         "d":"M676.76 1107.82l90.12 67.37 4.45 107.79-150.1-2.99 55.53-172.17z",
+         "svg": {
+          "x":700,
+          "y":1230,
+          "fill":"black"
+         }
       },
       {
          "id":25,
@@ -253,7 +298,12 @@ function Mountain() {
          "stroke":"#000",
          "strokeMiterlimit":"10",
          "strokeWidth":"3",
-         "d":"M543.4 1009.01v270.98h77.83l55.53-172.17-133.36-98.81z"
+         "d":"M543.4 1009.01v270.98h77.83l55.53-172.17-133.36-98.81z",
+         "svg": {
+          "x":600,
+          "y":1180,
+          "fill":"black"
+         }
       },
       {
          "id":26,
@@ -262,7 +312,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M353.09 1279.83H543.4V922.61l-190.31 357.22z"
+         "d":"M353.09 1279.83H543.4V922.61l-190.31 357.22z",
+         "svg": {
+          "x":480,
+          "y":1190,
+          "fill":"black"
+         }
       },
       {
          "id":27,
@@ -271,7 +326,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M348.81 915.84l-36.83 264.38 41.11 99.61 101.63-190.76-105.91-173.23z"
+         "d":"M348.81 915.84l-36.83 264.38 41.11 99.61 101.63-190.76-105.91-173.23z",
+         "svg": {
+          "x":380,
+          "y":1120,
+          "fill":"black"
+         }
       },
       {
          "id":28,
@@ -280,7 +340,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M246.04 1020.44l107.05 259.39-217.36 3.17 110.31-262.56z"
+         "d":"M246.04 1020.44l107.05 259.39-217.36 3.17 110.31-262.56z",
+         "svg": {
+          "x":240,
+          "y":1220,
+          "fill":"black"
+         }
       },
       {
          "id":29,
@@ -289,7 +354,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M109.71 929.93l136.33 90.51L135.73 1283l-26.02-353.07z"
+         "d":"M109.71 929.93l136.33 90.51L135.73 1283l-26.02-353.07z",
+         "svg": {
+          "x":170,
+          "y":1100,
+          "fill":"black"
+         }
       },
       {
          "id":30,
@@ -298,7 +368,12 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M1.5 1281.5l108.21-351.57L135.73 1283 1.5 1281.5z"
+         "d":"M1.5 1281.5l108.21-351.57L135.73 1283 1.5 1281.5z",
+         "svg": {
+          "x":80,
+          "y":1200,
+          "fill":"black"
+         }
       },
       {
          "id":31,
@@ -307,60 +382,44 @@ function Mountain() {
          "strokeLinecap":"round",
          "strokeLinejoin":"round",
          "strokeWidth":"3",
-         "d":"M38.5 878.5l-37 403 108-352-71-51z"
+         "d":"M38.5 878.5l-37 403 108-352-71-51z",
+         "svg": {
+           "x":63,
+           "y":990,
+           "fill":"black"
+          }
       }
    ]
-
   )
 
-  const markComplete=(e, polygon)=>{
+  const markComplete=(polygon)=>{
     setPolygons([...polygons.filter(p => p.id!==polygon.id), {...polygon, fill: 'red' }]);
 
-    console.log([...polygons.filter(p => p.id===polygon.id)]);
+    // console.log([...polygons.filter(p => p.id===polygon.id)]);
+    console.log(polygon.id);
   }
 
   return (
-    // <View style={styles.container}>
-    // <Svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1023 1284.5">
-    //   {/* <G data-name="Layer 2">
-    //       <G data-name="mood tracker">
- 
-    
-            
-    //     </G>
-    //   </G> */}
-    //           <Text
-    //           x="50"
-    //           y="16"
-    //           fill="white"
-    //           fontSize="16"
-    //           fontWeight="bold"
-    //           textAnchor="middle">
-    //           0
-    //         </Text>
-    //   </Svg>
-    //   </View>
     <View style={styles.container}>
-        <Svg width="100%" height="100%" viewBox="0 0 100 20">
-          
-          {polygons.map((polygon) => <G key={polygon.id}><Path
-              onPressIn={(e) => markComplete(e, polygon)}
+        <Svg viewBox="0 0 1023 1284.5">
+          {polygons.map((polygon) => <G key={polygon.id}>
+              <Path 
               {...polygon}
-              disabled = {true}
+              onPressIn={() => markComplete(polygon)}
               />
-              {/* <Rect width="100" height="20" fill="blue" />
+              { polygon.svg?
               <Text
-                x="50"
-                y="16"
-                fill="white"
-                fontSize="16"
-                fontWeight="bold"
-                textAnchor="middle">
-                0
-              </Text> */}
-                </G>
-            )}
-          
+              x={polygon.svg.x}
+              y={polygon.svg.y}
+              fill={polygon.svg.fill}
+              fontSize="50"
+              fontWeight="bold"
+              textAnchor="middle">
+              {polygon.id}
+              </Text>
+              :<></>}
+            </G>
+          )}
         </Svg>
       </View>
   );
