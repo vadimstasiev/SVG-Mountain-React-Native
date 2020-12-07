@@ -28,7 +28,7 @@ import Svg, {
 function Mountain() {
   // TODOS
   // check how many days the month has 
-  // render the svg based on the number of months (remove polygons if necessary)
+  // render the day based on the number of months (remove polygons if necessary)
   // create the mood - color array 
 
   const [polygons, setPolygons] = useState(
@@ -174,7 +174,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M348.81 915.84l-36.83 264.38-65.94-159.78-136.33-90.51 239.1-14.09z",
-         "svg": {
+         "day": {
           "x":260,
           "y":990,
           "fill":"black"
@@ -188,7 +188,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M348.81 915.84L441.5 771.5l13.22 317.57-105.91-173.23z",
-         "svg": {
+         "day": {
           "x":400,
           "y":940,
           "fill":"black"
@@ -202,7 +202,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M543.4 1008.3l135.36-32.72-102.05-191.25-33.31 138.28v85.69z",
-         "svg": {
+         "day": {
           "x":590,
           "y":940,
           "fill":"black"
@@ -216,7 +216,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M576.71 784.33l102.05 191.25 165.9-40.11-267.95-151.14z",
-         "svg": {
+         "day": {
           "x":710,
           "y":930,
           "fill":"black"
@@ -230,7 +230,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M767.27 1175.36l77.39-239.89-301.26 72.83 223.87 167.06z",
-         "svg": {
+         "day": {
           "x":720,
           "y":1060,
           "fill":"black"
@@ -244,7 +244,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M882.08 865.89l53.45 131.39-168.26 178.08 77.39-239.89 37.42-69.58z",
-         "svg": {
+         "day": {
           "x":880,
           "y":1000,
           "fill":"black"
@@ -258,7 +258,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M935.53 997.28L958.5 896.5l63 385h-164l78.03-284.22z",
-         "svg": {
+         "day": {
           "x":940,
           "y":1230,
           "fill":"black"
@@ -272,7 +272,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M857.5 1281.5l-86.72 1.5-3.51-107.64 168.26-178.08-78.03 284.22z",
-         "svg": {
+         "day": {
           "x":820,
           "y":1230,
           "fill":"black"
@@ -286,7 +286,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M676.76 1107.82l90.12 67.37 4.45 107.79-150.1-2.99 55.53-172.17z",
-         "svg": {
+         "day": {
           "x":700,
           "y":1230,
           "fill":"black"
@@ -299,7 +299,7 @@ function Mountain() {
          "strokeMiterlimit":"10",
          "strokeWidth":"3",
          "d":"M543.4 1009.01v270.98h77.83l55.53-172.17-133.36-98.81z",
-         "svg": {
+         "day": {
           "x":600,
           "y":1180,
           "fill":"black"
@@ -313,7 +313,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M353.09 1279.83H543.4V922.61l-190.31 357.22z",
-         "svg": {
+         "day": {
           "x":480,
           "y":1190,
           "fill":"black"
@@ -327,7 +327,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M348.81 915.84l-36.83 264.38 41.11 99.61 101.63-190.76-105.91-173.23z",
-         "svg": {
+         "day": {
           "x":380,
           "y":1120,
           "fill":"black"
@@ -341,7 +341,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M246.04 1020.44l107.05 259.39-217.36 3.17 110.31-262.56z",
-         "svg": {
+         "day": {
           "x":240,
           "y":1220,
           "fill":"black"
@@ -355,7 +355,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M109.71 929.93l136.33 90.51L135.73 1283l-26.02-353.07z",
-         "svg": {
+         "day": {
           "x":170,
           "y":1100,
           "fill":"black"
@@ -369,7 +369,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M1.5 1281.5l108.21-351.57L135.73 1283 1.5 1281.5z",
-         "svg": {
+         "day": {
           "x":80,
           "y":1200,
           "fill":"black"
@@ -383,7 +383,7 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3",
          "d":"M38.5 878.5l-37 403 108-352-71-51z",
-         "svg": {
+         "day": {
            "x":63,
            "y":990,
            "fill":"black"
@@ -393,7 +393,17 @@ function Mountain() {
   )
 
   const markComplete=(polygon)=>{
-    setPolygons([...polygons.filter(p => p.id!==polygon.id), {...polygon, fill: 'red' }]);
+    setPolygons(
+      [...polygons.filter(p => p.id!==polygon.id),
+        {...polygon,
+          fill: "red",
+          day: {
+            x:polygon.day.x,
+            y:polygon.day.y,
+            fill:"white"
+          }
+        }
+      ]);
 
     // console.log([...polygons.filter(p => p.id===polygon.id)]);
     console.log(polygon.id);
@@ -407,11 +417,11 @@ function Mountain() {
               {...polygon}
               onPressIn={() => markComplete(polygon)}
               />
-              { polygon.svg?
+              { polygon.day?
               <Text
-              x={polygon.svg.x}
-              y={polygon.svg.y}
-              fill={polygon.svg.fill}
+              x={polygon.day.x}
+              y={polygon.day.y}
+              fill={polygon.day.fill}
               fontSize="50"
               fontWeight="bold"
               textAnchor="middle">
