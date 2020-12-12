@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import 'react-native-gesture-handler';
 
 import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon } from "native-base";
