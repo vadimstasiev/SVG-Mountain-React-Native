@@ -264,7 +264,9 @@ function Mountain() {
          "strokeMiterlimit":"10",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":230,
+            "y":870,
+            "fill":"black"
          }
       },
       {
@@ -276,7 +278,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":180,
+            "y":725,
+            "fill":"black"
          }
       },
       {
@@ -288,7 +292,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":210,
+            "y":580,
+            "fill":"black"
          }
       },
       {
@@ -300,7 +306,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":285,
+            "y":725,
+            "fill":"black"
          }
       },
       {
@@ -312,7 +320,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":400,
+            "y":720,
+            "fill":"black"
          }
       },
       {
@@ -323,7 +333,9 @@ function Mountain() {
          "strokeMiterlimit":"10",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":505,
+            "y":850,
+            "fill":"black"
          }
       },
       {
@@ -335,7 +347,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":680,
+            "y":800,
+            "fill":"black"
          }
       },
       {
@@ -347,7 +361,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":810,
+            "y":800,
+            "fill":"black"
          }
       },
       {
@@ -359,7 +375,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":620,
+            "y":645,
+            "fill":"black"
          }
       },
       {
@@ -371,7 +389,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":675,
+            "y":505,
+            "fill":"black"
          }
       },
       {
@@ -383,7 +403,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":490,
+            "y":540,
+            "fill":"black"
          }
       },
       {
@@ -395,7 +417,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":550,
+            "y":370,
+            "fill":"black"
          }
       },
       {
@@ -407,7 +431,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":400,
+            "y":420,
+            "fill":"black"
          }
       },
       {
@@ -419,7 +445,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":460,
+            "y":320,
+            "fill":"black"
          }
       },
       {
@@ -431,7 +459,9 @@ function Mountain() {
          "strokeLinejoin":"round",
          "strokeWidth":"3px",
          "day":{
-            
+            "x":465,
+            "y":180,
+            "fill":"black"
          }
       }
    ]
