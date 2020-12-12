@@ -13,6 +13,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import MountainScreen from './screens/MountainScreen';
 
 
 
@@ -31,6 +32,9 @@ const App = () => {
           </Stack.Screen>
           <Stack.Screen name="Register">
             {props => <RegisterScreen {...props} extraData={{}} />}
+          </Stack.Screen>
+          <Stack.Screen name="Mountain">
+            {props => <MountainScreen {...props} extraData={{}} />}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>

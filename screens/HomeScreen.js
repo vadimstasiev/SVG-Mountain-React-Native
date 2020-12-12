@@ -47,6 +47,9 @@ const HomeScreen = ({navigation}) => {
         {/* {console.log(user)} */}
         <Text>Welcome, {userData.displayName}!</Text>
           <Text>You're logged in!</Text>
+          <Button onPress={() => navigation.navigate('Mountain')}>
+            <Text>Mountain Screen</Text>
+          </Button>
           <Button onPress={signOut}>
             <Text>Sign out</Text>
           </Button>
