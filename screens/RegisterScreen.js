@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
 import {
   ScrollView,
   View,
@@ -9,6 +10,8 @@ import {
 import { RaisedTextButton } from 'react-native-material-buttons';
 import { TextField } from 'react-native-material-textfield';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+
+let db = firestore();
 
 let styles = {
   scroll: {
@@ -145,8 +148,10 @@ class RegisterScreen extends Component {
           await auth()
             .createUserWithEmailAndPassword(this['email'].value(), this['password'].value())
             .then(async() => {
-              await auth().currentUser.updateProfile({
-                  displayName: this['firstname'].value()
+              let currentUser = auth().currentUser;
+              await db.collection("users").doc(currentUser.uid).set({
+                displayName: currentUser.displayName,
+                email: currentUser.email
               })
               this.navigation.navigate('Home');
             })

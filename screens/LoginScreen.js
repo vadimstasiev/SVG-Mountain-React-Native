@@ -160,9 +160,6 @@ class LoginScreen extends Component {
             keyboardShouldPersistTaps='handled'
             >
             <View style={styles.container}>
-
-
-
                 <TextField
                 ref={this.emailRef}
                 keyboardType='email-address'
@@ -176,7 +173,6 @@ class LoginScreen extends Component {
                 label='Email Address'
                 error={errors.email}
                 />
-
                 <TextField
                 ref={this.passwordRef}
                 secureTextEntry={secureTextEntry}
@@ -197,7 +193,6 @@ class LoginScreen extends Component {
                 />
 
             </View>
-
             <View style={styles.buttonContainer}>
                 <RaisedTextButton
                 onPress={this.onSubmit}

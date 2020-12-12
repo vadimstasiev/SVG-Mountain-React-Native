@@ -2,20 +2,25 @@ import React, { useState, useEffect, useContext } from "react";
 import auth from "@react-native-firebase/auth";
 import { View } from "react-native";
 import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon } from "native-base";
+import firestore from "@react-native-firebase/firestore";
 
+let db = firestore();
 
 const HomeScreen = ({navigation}) => {
-
+  
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({});
+  const [userData, setUserData] = useState({});
 
   // Handle user state changes
   function onAuthStateChanged(user) {
     setUser(user);
+    db.collection("users").doc(user.uid).get().then((doc)=>setUserData(doc.data()))
+    console.log(user.uid);
     if (initializing) setInitializing(false);
   }
-
+  
   const signOut =()=>{
     auth().signOut().then(() => {
       // Sign-out successful.
@@ -24,22 +29,24 @@ const HomeScreen = ({navigation}) => {
       // An error happened.
     });
   }
-
+  
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
-
+  
   // could return a loading screen instead
   if (initializing) return null; 
 
+  
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
       {
         user?
         <>
-        <Text>Welcome, {user.displayName}!</Text>
+        {/* {console.log(user)} */}
+        <Text>Welcome, {userData.displayName}!</Text>
           <Text>You're logged in!</Text>
           <Button onPress={signOut}>
             <Text>Sign out</Text>
