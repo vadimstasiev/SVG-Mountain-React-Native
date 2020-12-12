@@ -17,7 +17,6 @@ const HomeScreen = ({navigation}) => {
   function onAuthStateChanged(user) {
     setUser(user);
     db.collection("users").doc(user.uid).get().then((doc)=>setUserData(doc.data()))
-    console.log(user.uid);
     if (initializing) setInitializing(false);
   }
   
