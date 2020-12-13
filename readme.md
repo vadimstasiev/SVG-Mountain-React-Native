@@ -53,10 +53,9 @@ Right after yarn install the project must be ran once which might result in a cr
 
 - Mood tracker (MARIAN)
 
-  - ⬜️ create page
+  - ✅ create page
     IN PROGRESS...
-  - ⬜️ create functionality to color
-    IN PROGRESS...
+  - ✅ create functionality to color
   - ⬜️ save to db
   - ⬜️ autopopulate svg
   - ⬜️ save the svg in gallery
