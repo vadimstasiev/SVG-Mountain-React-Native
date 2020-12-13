@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Button, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet } from "react-native";
+import {Text} from 'native-base';
+import ColorPalette from 'react-native-color-palette';
+
 
 import Svg, {
   Circle,
@@ -8,7 +11,7 @@ import Svg, {
   TSpan,
   TextPath,
   Path,
-  Text,
+  Text as SvgText,
   Polygon,
   Polyline,
   Line,
@@ -27,9 +30,12 @@ import Svg, {
 
 function Mountain() {
   // TODOS
-  // check how many days the month has 
+  // check how many days the month has
   // render the day based on the number of months (remove polygons if necessary)
-  // create the mood - color array 
+  // create the mood - color array
+
+  const [color, setColor] = useState('#C0392B');
+  const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
 
   const [polygons, setPolygons] = useState(
    [
@@ -471,7 +477,7 @@ function Mountain() {
     setPolygons(
       [...polygons.filter(p => p.id!==polygon.id),
         {...polygon,
-          fill: "red",
+          fill: color,
           day: polygon.day?{
             x:polygon.day.x,
             y:polygon.day.y,
@@ -485,16 +491,18 @@ function Mountain() {
   }
 
   return (
-    <View style={styles.container}>
-        <Svg viewBox="0 0 1023 1284.5">
-          
+     <View style={styles.container}>
+        <Svg
+        height="80%"
+        viewBox="0 0 1023 1284.5">
+
           {polygons.map((polygon) => <G key={polygon.id}>
-              <Path 
+              <Path
               {...polygon}
               onPressIn={() => markComplete(polygon)}
               />
               { polygon.day?
-              <Text
+              <SvgText
               x={polygon.day.x}
               y={polygon.day.y}
               fill={polygon.day.fill}
@@ -502,11 +510,28 @@ function Mountain() {
               fontWeight="bold"
               textAnchor="middle">
               {polygon.id}
-              </Text>
+              </SvgText>
               :<></>}
             </G>
           )}
         </Svg>
+        <Text>
+           
+        </Text>
+        <Text style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 18,
+            marginTop: 0,
+            width: 200,
+            backgroundColor: 'yellow'
+        }}>Pick your mood</Text>
+        <ColorPalette
+            onChange={color => setColor(color)}
+            defaultColor={color}
+            colors={colorOptions}
+            titleStyles={{display:"none"}}
+         />
       </View>
   );
 }
