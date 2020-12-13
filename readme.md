@@ -1,6 +1,5 @@
 # shit I haven't done yet:
 
-- at marian's branch: convert and try the new svg to see if it works without the overlapp shit
 - add the add notes functionality to the moutain
 - do the notes screens
 
