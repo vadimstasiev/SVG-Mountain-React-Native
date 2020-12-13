@@ -15,8 +15,10 @@ const HomeScreen = ({navigation}) => {
 
   // Handle user state changes
   function onAuthStateChanged(user) {
-    setUser(user);
-    db.collection("users").doc(user.uid).get().then((doc)=>setUserData(doc.data()))
+    if(user){
+      setUser(user);
+      db.collection("users").doc(user.uid).get().then((doc)=>setUserData(doc.data()))
+    }
     if (initializing) setInitializing(false);
   }
   
