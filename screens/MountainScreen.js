@@ -34,6 +34,7 @@ function Mountain() {
   // render the day based on the number of months (remove polygons if necessary)
   // create the mood - color array
 
+  const defaultColor = "#fff";
   const [color, setColor] = useState('#C0392B');
   const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
 
@@ -477,11 +478,11 @@ function Mountain() {
     setPolygons(
       [...polygons.filter(p => p.id!==polygon.id),
         {...polygon,
-          fill: color,
+          fill: polygon.fill===defaultColor?color:polygon.fill,
           day: polygon.day?{
             x:polygon.day.x,
             y:polygon.day.y,
-            fill:"white"
+            fill: "white"
           }:{}
         }
       ]);
