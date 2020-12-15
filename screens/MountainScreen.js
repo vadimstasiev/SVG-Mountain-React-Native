@@ -486,7 +486,7 @@ const Mountain = ({navigation}) => {
          }
       }
    ]);
-   navigation.navigate('Notes', {id: polygon.id})
+   navigation.navigate('Notes', {id: polygon.id, color})
   }
 
   return (
