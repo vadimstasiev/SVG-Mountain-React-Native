@@ -28,11 +28,13 @@ import Svg, {
   Mask,
 } from "react-native-svg";
 
-const Mountain = ({navigation}) => {
+const Mountain = ({navigation, route}) => {
   // TODOS
   // check how many days the month has
   // render the day based on the number of months (remove polygons if necessary)
   // create the mood - color array
+
+  const { user } = route.params;
 
   const defaultColor = "#fff";
   const [color, setColor] = useState('#C0392B');
@@ -486,7 +488,7 @@ const Mountain = ({navigation}) => {
          }
       }
    ]);
-   navigation.navigate('Notes', {id: polygon.id})
+   navigation.navigate('Notes', {user, dayNum: polygon.id, monthSvgScreen: 'January20'})
   }
 
   return (
@@ -517,7 +519,7 @@ const Mountain = ({navigation}) => {
         <Text>
            
         </Text>
-        <Text style={{
+        {/* <Text style={{
             textAlign: 'center',
             fontWeight: 'bold',
             fontSize: 18,
@@ -530,7 +532,7 @@ const Mountain = ({navigation}) => {
             defaultColor={color}
             colors={colorOptions}
             titleStyles={{display:"none"}}
-         />
+         /> */}
       </View>
   );
 }

@@ -10,14 +10,16 @@ const HomeScreen = ({navigation}) => {
   
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
-  const [user, setUser] = useState({});
-  const [userData, setUserData] = useState({});
+  const [user, setUser] = useState();
+  // const [userData, setUserData] = useState({});
 
   // Handle user state changes
-  function onAuthStateChanged(user) {
+  const onAuthStateChanged = user => {
     if(user){
       setUser(user);
-      db.collection("users").doc(user.uid).get().then((doc)=>setUserData(doc.data()))
+      // db.collection("users").doc(user.uid).get().then((doc)=>{
+      //   setUserData(doc.data());
+      // })
     }
     if (initializing) setInitializing(false);
   }
@@ -26,15 +28,14 @@ const HomeScreen = ({navigation}) => {
     auth().signOut().then(() => {
       // Sign-out successful.
       console.log("Sign-out successful");
-    }).catch((error) => {
-      // An error happened.
-    });
+      setUser(undefined);
+    })
   }
   
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
-  }, []);
+  }, [user]);
   
   // could return a loading screen instead
   if (initializing) return null; 
@@ -46,10 +47,9 @@ const HomeScreen = ({navigation}) => {
       {
         user?
         <>
-        {/* {console.log(user)} */}
-        <Text>Welcome, {userData.displayName}!</Text>
+        <Text>Welcome!</Text>
           <Text>You're logged in!</Text>
-          <Button onPress={() => navigation.navigate('Mountain')}>
+          <Button onPress={() => navigation.navigate('Mountain', {user})}>
             <Text>Mountain Screen</Text>
           </Button>
           <Button onPress={signOut}>

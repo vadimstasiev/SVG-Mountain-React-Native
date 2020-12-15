@@ -150,7 +150,7 @@ class RegisterScreen extends Component {
             .then(async() => {
               let currentUser = auth().currentUser;
               await db.collection("users").doc(currentUser.uid).set({
-                displayName: currentUser.displayName,
+                displayName: this['firstname'].value(),
                 email: currentUser.email
               })
               this.navigation.navigate('Home');
