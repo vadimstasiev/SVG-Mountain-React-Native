@@ -28,7 +28,7 @@ import Svg, {
   Mask,
 } from "react-native-svg";
 
-function Mountain() {
+const Mountain = ({navigation}) => {
   // TODOS
   // check how many days the month has
   // render the day based on the number of months (remove polygons if necessary)
@@ -475,20 +475,18 @@ function Mountain() {
   )
 
   const markComplete=(polygon)=>{
-    setPolygons(
-      [...polygons.filter(p => p.id!==polygon.id),
-        {...polygon,
-          fill: polygon.fill===defaultColor?color:polygon.fill,
-          day: polygon.day?{
-            x:polygon.day.x,
-            y:polygon.day.y,
-            fill: "white"
-          }:{}
-        }
-      ]);
-
-    // console.log([...polygons.filter(p => p.id===polygon.id)]);
-    console.log(polygon.id);
+   setPolygons(
+   [...polygons.filter(p => p.id!==polygon.id),
+      {...polygon,
+         fill: polygon.fill===defaultColor?color:polygon.fill,
+         day: {
+         x:polygon.day.x,
+         y:polygon.day.y,
+         fill: "white"
+         }
+      }
+   ]);
+   navigation.navigate('Notes', {id: polygon.id})
   }
 
   return (

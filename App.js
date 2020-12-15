@@ -14,6 +14,7 @@ import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import MountainScreen from './screens/MountainScreen';
+import NotesScreen from './screens/NotesScreen';
 
 
 
@@ -35,6 +36,9 @@ const App = () => {
           </Stack.Screen>
           <Stack.Screen name="Mountain">
             {props => <MountainScreen {...props} extraData={{}} />}
+          </Stack.Screen>
+          <Stack.Screen name="Notes">
+            {props => <NotesScreen {...props} extraData={{}} />}
           </Stack.Screen>
         </Stack.Navigator>
       </NavigationContainer>
