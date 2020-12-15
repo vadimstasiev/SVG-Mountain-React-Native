@@ -29,7 +29,24 @@ import Svg, {
 } from "react-native-svg";
 
 const Notes = (props) => {
-   const { id, color } = props.route.params;
+   const { id } = props.route.params;
+
+
+
+   const defaultColor = "#fff";
+   const [color, setColor] = useState('#C0392B');
+   const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
+   const moods = {
+      '#C0392B':'Good Perfect',
+      '#E74C3C':'Good',
+      '#9B59B6':'Average',
+      '#8E44AD':'Bad',
+      '#2980B9':'Fucking Terrible'
+   }
+   const [mood, setMood] = useState('Good')
+
+
+
 
    // const [inputHistory, setInputHistory] = useState([])
    const [input, setInput] = useState('')
@@ -40,6 +57,7 @@ const Notes = (props) => {
 
    const onChangeText = (text) =>{
       // setInputHistory([...inputHistory, text]);
+      
       setInput(text);
    }
 
@@ -58,12 +76,28 @@ const Notes = (props) => {
       <Form>
          <Textarea rowSpan={5} onChangeText={(text)=>onChangeText(text)}
          bordered placeholder="" />
+         <Text style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 18,
+            marginTop: 0,
+            width: 200,
+         }}>{mood}</Text>
+         <ColorPalette
+               onChange={color => {
+                  setColor(color);
+                  setMood(moods[color]);
+               }}
+               defaultColor={color}
+               colors={colorOptions}
+               titleStyles={{display:"none"}}
+            />
          <Button style={{marginTop:20}} onPress={onSubmit} block success>
             <Text>Save</Text>
          </Button>
       </Form>
       </Content>
-      <Footer>
+      {/* <Footer>
           <FooterTab>
             <Button>
               <Text></Text>
@@ -78,7 +112,7 @@ const Notes = (props) => {
               <Text></Text>
             </Button>
           </FooterTab>
-        </Footer>
+        </Footer> */}
    </Container>
 }
 
