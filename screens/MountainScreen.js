@@ -474,6 +474,20 @@ const Mountain = ({navigation, route}) => {
             "y":320,
             "fill":"black"
          }
+      },
+      {
+         "id":31,
+         "d":"M441.3 217.01L408 238.5 480 1.5 494.2 121.6 494.98 172.84 494.98 182.37 441.3 217.01z",
+         "fill":"#fff",
+         "stroke":"#000",
+         "strokeLinecap":"round",
+         "strokeLinejoin":"round",
+         "strokeWidth":"3px",
+         "day":{
+            "x":465,
+            "y":180,
+            "fill":"black"
+         }
       }
    ]
   )
@@ -499,7 +513,7 @@ const Mountain = ({navigation, route}) => {
       [...polygons.map(polygon => {
          // console.log('here', polygon.id, id)
          // String(polygon.id)===id?console.log(here,polygon):null;
-         return String(polygon.id)!==id?polygon:
+         return String(polygon.id)!==String(id)?polygon:
          {...polygon,
             fill: color,
             day: {

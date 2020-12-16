@@ -38,20 +38,32 @@ const Notes = (props) => {
    
    const [input, setInput] = useState('');
 
-   const [color, setColor] = useState('#C0392B');
+   // const [color, setColor] = useState('#C0392B');
    
    const [mood, setMood] = useState(defaultMood);
 
    
    
-   const submit = async (text) =>{
+   const submit = text =>{
       setInput(text);
       console.log('User: ', user.uid);
       // db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(dayNum).set
       // await db.collection("users").doc(user.uid).collection(monthSvgScreen).add({asd:'hello', dayNum})
       console.log('dayNum: ', String(dayNum))
-      await db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
+      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
          message: input,
+         mood
+      })
+      .then((docRef) => {
+         console.log("Document written with ID: ", docRef);
+      })
+      .catch((error) => {
+         console.error("Error adding document: ", error);
+      });
+   }
+
+   const submitMood = () => {
+      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).update({
          mood
       })
       .then((docRef) => {
@@ -86,9 +98,8 @@ const Notes = (props) => {
          }}>{mood}</Text>
          <ColorPalette
                onChange={color => {
-                  setColor(color);
                   setMood(moods[color]);
-                  submit();
+                  submitMood();
                }}
                defaultColor={Object.keys(moods).find(key => moods[key] === defaultMood)}
                colors={colorOptions}
