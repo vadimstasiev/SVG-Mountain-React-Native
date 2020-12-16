@@ -34,20 +34,12 @@ import Svg, {
 let db = firestore();
 
 const Notes = (props) => {
-   const { user, dayNum, monthSvgScreen } = props.route.params;
+   const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = props.route.params;
    
    const [input, setInput] = useState('');
 
    const [color, setColor] = useState('#C0392B');
-   const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
-   let defaultMood = 'Good';
-   const moods = {
-      '#C0392B':'Perfect',
-      '#E74C3C':'Good',
-      '#9B59B6':'Average',
-      '#8E44AD':'Bad',
-      '#2980B9':'Fucking Terrible'
-   }
+   
    const [mood, setMood] = useState(defaultMood);
 
    

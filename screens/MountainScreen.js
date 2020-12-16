@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
 import {Text} from 'native-base';
 import ColorPalette from 'react-native-color-palette';
+
+import auth from "@react-native-firebase/auth";
+import firestore from "@react-native-firebase/firestore";
+
 
 
 import Svg, {
@@ -28,17 +32,29 @@ import Svg, {
   Mask,
 } from "react-native-svg";
 
+let db = firestore();
+
+
 const Mountain = ({navigation, route}) => {
   // TODOS
   // check how many days the month has
   // render the day based on the number of months (remove polygons if necessary)
   // create the mood - color array
 
-  const { user } = route.params;
-
-  const defaultColor = "#fff";
-  const [color, setColor] = useState('#C0392B');
-  const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
+   const { user } = route.params;
+   const monthSvgScreen = 'January20';
+   const defaultColor = "#fff";
+   const selectedColor = "yellow";
+   // const [color, setColor] = useState('#C0392B');
+   const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
+   let defaultMood = 'Good';
+   const moods = {
+      '#C0392B':'Perfect',
+      '#E74C3C':'Good',
+      '#9B59B6':'Average',
+      '#8E44AD':'Bad',
+      '#2980B9':'Fucking Terrible'
+   }
 
   const [polygons, setPolygons] = useState(
    [
@@ -459,92 +475,122 @@ const Mountain = ({navigation, route}) => {
             "fill":"black"
          }
       },
-      {
-         "id":31,
-         "d":"M441.3 217.01L408 238.5 480 1.5 494.2 121.6 494.98 172.84 494.98 182.37 441.3 217.01z",
-         "fill":"#fff",
-         "stroke":"#000",
-         "strokeLinecap":"round",
-         "strokeLinejoin":"round",
-         "strokeWidth":"3px",
-         "day":{
-            "x":465,
-            "y":180,
-            "fill":"black"
-         }
-      }
+      // {
+      //    "id":31,
+      //    "d":"M441.3 217.01L408 238.5 480 1.5 494.2 121.6 494.98 172.84 494.98 182.37 441.3 217.01z",
+      //    "fill":"#fff",
+      //    "stroke":"#000",
+      //    "strokeLinecap":"round",
+      //    "strokeLinejoin":"round",
+      //    "strokeWidth":"3px",
+      //    "day":{
+      //       "x":465,
+      //       "y":180,
+      //       "fill":"black"
+      //    }
+      // }
    ]
   )
 
-  const markComplete=(polygon)=>{
-   setPolygons(
-   [...polygons.filter(p => p.id!==polygon.id),
-      {...polygon,
-         fill: polygon.fill===defaultColor?color:polygon.fill,
-         day: {
-         x:polygon.day.x,
-         y:polygon.day.y,
-         fill: "white"
+   const clickPolygon = (polygon) =>{
+      setPolygons(
+      [...polygons.filter(p => p.id!==polygon.id),
+         {...polygon,
+            fill: polygon.fill===defaultColor?selectedColor:polygon.fill,
+            day: {
+            x:polygon.day.x,
+            y:polygon.day.y,
+            fill: "white"
+            }
          }
-      }
-   ]);
-   navigation.navigate('Notes', {user, dayNum: polygon.id, monthSvgScreen: 'January20'})
-  }
+      ]);
+      navigation.navigate('Notes', {user, dayNum: polygon.id, monthSvgScreen, moods, defaultMood, colorOptions})
+   }
 
-  return (
-     <View style={styles.container}>
-        <Svg
-        height="80%"
-        viewBox="0 0 1023 1284.5">
+   const markComplete=(id, color)=>{
+      setPolygons(
+      [...polygons.map(polygon => {
+         return polygon.id!==id?polygon:
+         {...polygon,
+            fill: color,
+            day: {
+               x:polygon.day.x,
+               y:polygon.day.y,
+               fill: "white"
+            }
+         }
+      })
+      ]);
+   }
 
-          {polygons.map((polygon) => <G key={polygon.id}>
-              <Path
-              {...polygon}
-              onPressIn={() => markComplete(polygon)}
-              />
-              { polygon.day?
-              <SvgText
-              x={polygon.day.x}
-              y={polygon.day.y}
-              fill={polygon.day.fill}
-              fontSize="50"
-              fontWeight="bold"
-              textAnchor="middle">
-              {polygon.id}
-              </SvgText>
-              :<></>}
-            </G>
-          )}
-        </Svg>
-        <Text>
-           
-        </Text>
-        {/* <Text style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 18,
-            marginTop: 0,
-            width: 200,
-            backgroundColor: 'yellow'
-        }}>Pick your mood</Text>
-        <ColorPalette
-            onChange={color => setColor(color)}
-            defaultColor={color}
-            colors={colorOptions}
-            titleStyles={{display:"none"}}
-         /> */}
-      </View>
-  );
-}
+   const [monthData, setMonthData] = useState({});
+   useEffect(() => {
+         db.collection("users").doc(user.uid).collection(monthSvgScreen).get().then(querySnapshot=>{
+            querySnapshot.forEach((doc) =>{
+               // setColor(Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
+               markComplete(doc.id, Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
+            })
+         })
+         .catch((error) => {
+            console.log("Error getting data:", error)
+         });
+         let currentUser = auth().currentUser;
+   }, [monthData])
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingTop: 10,
-    backgroundColor: '#ecf0f1',
-    padding: 8,
-  },
-});
+   return (
+      <View style={styles.container}>
+         <Svg
+         height="80%"
+         viewBox="0 0 1023 1284.5">
 
-export default Mountain;
+            {polygons.map((polygon) => <G key={polygon.id}>
+               <Path
+               {...polygon}
+               onPressIn={() => clickPolygon(polygon)}
+               />
+               { polygon.day?
+               <SvgText
+               x={polygon.day.x}
+               y={polygon.day.y}
+               fill={polygon.day.fill}
+               fontSize="50"
+               fontWeight="bold"
+               textAnchor="middle">
+               {polygon.id}
+               </SvgText>
+               :<></>}
+               </G>
+            )}
+         </Svg>
+         <Text>
+            
+         </Text>
+         {/* <Text style={{
+               textAlign: 'center',
+               fontWeight: 'bold',
+               fontSize: 18,
+               marginTop: 0,
+               width: 200,
+               backgroundColor: 'yellow'
+         }}>Pick your mood</Text>
+         <ColorPalette
+               onChange={color => setColor(color)}
+               defaultColor={color}
+               colors={colorOptions}
+               titleStyles={{display:"none"}}
+            /> */}
+         </View>
+   );
+   }
+
+   const styles = StyleSheet.create({
+   container: {
+      flex: 1,
+      justifyContent: 'center',
+      paddingTop: 10,
+      backgroundColor: '#ecf0f1',
+      padding: 8,
+   },
+   });
+
+   export default Mountain;

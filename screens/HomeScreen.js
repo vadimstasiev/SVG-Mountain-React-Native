@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import auth from "@react-native-firebase/auth";
 import { View } from "react-native";
 import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon } from "native-base";
+import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
 let db = firestore();
