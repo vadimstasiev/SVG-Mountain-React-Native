@@ -47,7 +47,7 @@ const Mountain = ({navigation, route}) => {
    const selectedColor = "yellow";
    // const [color, setColor] = useState('#C0392B');
    const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
-   let defaultMood = 'Good';
+   let defaultMood = 'None';
    const moods = {
       '#C0392B':'Perfect',
       '#E74C3C':'Good',
@@ -474,21 +474,7 @@ const Mountain = ({navigation, route}) => {
             "y":320,
             "fill":"black"
          }
-      },
-      // {
-      //    "id":31,
-      //    "d":"M441.3 217.01L408 238.5 480 1.5 494.2 121.6 494.98 172.84 494.98 182.37 441.3 217.01z",
-      //    "fill":"#fff",
-      //    "stroke":"#000",
-      //    "strokeLinecap":"round",
-      //    "strokeLinejoin":"round",
-      //    "strokeWidth":"3px",
-      //    "day":{
-      //       "x":465,
-      //       "y":180,
-      //       "fill":"black"
-      //    }
-      // }
+      }
    ]
   )
 
@@ -508,9 +494,12 @@ const Mountain = ({navigation, route}) => {
    }
 
    const markComplete=(id, color)=>{
+      console.log('doc.id: ', id, 'mood: ', color)
       setPolygons(
       [...polygons.map(polygon => {
-         return polygon.id!==id?polygon:
+         // console.log('here', polygon.id, id)
+         // String(polygon.id)===id?console.log(here,polygon):null;
+         return String(polygon.id)!==id?polygon:
          {...polygon,
             fill: color,
             day: {
@@ -523,19 +512,20 @@ const Mountain = ({navigation, route}) => {
       ]);
    }
 
-   const [monthData, setMonthData] = useState({});
-   useEffect(() => {
-         db.collection("users").doc(user.uid).collection(monthSvgScreen).get().then(querySnapshot=>{
-            querySnapshot.forEach((doc) =>{
-               // setColor(Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
-               markComplete(doc.id, Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
-            })
-         })
-         .catch((error) => {
-            console.log("Error getting data:", error)
-         });
-         let currentUser = auth().currentUser;
-   }, [monthData])
+   // useEffect(() => {
+   //       const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
+   //          querySnapshot.forEach(doc =>{
+   //             markComplete(doc.id, Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
+   //          })
+   //       })
+   //       .catch((error) => {
+   //          console.log("Error getting data:", error)
+   //       });
+   //       console.log('helloasasda');
+   //       return () => {
+   //          unsubscribe()
+   //        }
+   // })
 
    return (
       <View style={styles.container}>
@@ -562,23 +552,6 @@ const Mountain = ({navigation, route}) => {
                </G>
             )}
          </Svg>
-         <Text>
-            
-         </Text>
-         {/* <Text style={{
-               textAlign: 'center',
-               fontWeight: 'bold',
-               fontSize: 18,
-               marginTop: 0,
-               width: 200,
-               backgroundColor: 'yellow'
-         }}>Pick your mood</Text>
-         <ColorPalette
-               onChange={color => setColor(color)}
-               defaultColor={color}
-               colors={colorOptions}
-               titleStyles={{display:"none"}}
-            /> */}
          </View>
    );
    }
