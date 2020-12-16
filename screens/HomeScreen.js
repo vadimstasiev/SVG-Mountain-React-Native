@@ -14,12 +14,19 @@ const HomeScreen = ({navigation}) => {
   // const [userData, setUserData] = useState({});
 
   // Handle user state changes
-  const onAuthStateChanged = user => {
+  const onAuthStateChanged = async user => {
     if(user){
       setUser(user);
       // db.collection("users").doc(user.uid).get().then((doc)=>{
       //   setUserData(doc.data());
       // })
+      // let currentUser = auth().currentUser;
+      await auth().currentUser.reload();
+      // await db.collection("users").doc(user.uid).set({
+      //   displayName: user.displayName,
+      //   email: user.email
+      // })
+      console.log(user)
     }
     if (initializing) setInitializing(false);
   }

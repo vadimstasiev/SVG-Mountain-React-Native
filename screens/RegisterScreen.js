@@ -159,9 +159,11 @@ class RegisterScreen extends Component {
               if (error.code === 'auth/email-already-in-use') {
                 errors['email'] = 'Email already in use';
               }
-              
-              if (error.code === 'auth/invalid-email') {
+              else if (error.code === 'auth/invalid-email') {
                 errors['email'] = "Invalid format";
+              }
+              else {
+                console.log(error);
               }
             });
         }

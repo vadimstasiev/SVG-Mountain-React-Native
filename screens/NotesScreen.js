@@ -52,13 +52,22 @@ const Notes = (props) => {
 
    
    
-   const onChangeText = async (text) =>{
+   const submit = async (text) =>{
       setInput(text);
-      console.log('currentUser', user);
-      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(dayNum).set({
-         mood,
-         message: input
+      console.log('User: ', user.uid);
+      // db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(dayNum).set
+      // await db.collection("users").doc(user.uid).collection(monthSvgScreen).add({asd:'hello', dayNum})
+      console.log('dayNum: ', String(dayNum))
+      await db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
+         message: input,
+         mood
       })
+      .then((docRef) => {
+         console.log("Document written with ID: ", docRef);
+      })
+      .catch((error) => {
+         console.error("Error adding document: ", error);
+      });
    }
 
    return <Container>
@@ -74,7 +83,7 @@ const Notes = (props) => {
         </Header>
       <Content padder>
       <Form>
-         <Textarea rowSpan={5} onChangeText={(text)=>onChangeText(text)}
+         <Textarea rowSpan={5} onChangeText={setInput} onEndEditing={submit}
          bordered placeholder="" />
          <Text style={{
             textAlign: 'center',
@@ -87,6 +96,7 @@ const Notes = (props) => {
                onChange={color => {
                   setColor(color);
                   setMood(moods[color]);
+                  submit();
                }}
                defaultColor={Object.keys(moods).find(key => moods[key] === defaultMood)}
                colors={colorOptions}
