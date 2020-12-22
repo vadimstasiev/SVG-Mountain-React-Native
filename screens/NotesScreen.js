@@ -61,18 +61,24 @@ const Notes = ({route, navigation}) => {
 
    useEffect(() => {
       navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
-      const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
-         let data = await querySnapshot.data()
-         // console.log('querySnapshot.data()', querySnapshot.data())
-         setFirestoreInput(data.message);
-         setInput(firestoreInput)
-         setFirestoreMood(data.mood)
-         console.log(mood)
-         if(mood === defaultMood){
-            setMood(data.mood);
-            
-         }
-      })
+      let unsubscribe = () => {};
+      try {
+         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
+            let data = await querySnapshot.data()
+            // console.log('querySnapshot.data()', querySnapshot.data())
+            setFirestoreInput(data.message);
+            setInput(firestoreInput)
+            setFirestoreMood(data.mood)
+            console.log(mood)
+            if(mood === defaultMood){
+               setMood(data.mood);
+               
+            }
+         })
+      } catch (error) {
+         console.log('Firestore error', error);
+      }
+
       // markComplete(13, '#9B59B6');
       // markComplete(31, '#9B59B6');
       // console.log('helloasasda', snapshotData);

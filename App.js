@@ -34,9 +34,9 @@ const App = () => {
           <Stack.Screen name="Register">
             {props => <RegisterScreen {...props} extraData={{}} />}
           </Stack.Screen>
-          <Stack.Screen name="Mountain">
+          {/* <Stack.Screen name="Mountain">
             {props => <MountainScreen {...props} extraData={{}} />}
-          </Stack.Screen>
+          </Stack.Screen> */}
           <Stack.Screen name="Notes">
             {props => <NotesScreen {...props} extraData={{}} />}
           </Stack.Screen>

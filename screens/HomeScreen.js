@@ -1,13 +1,20 @@
 import React, { useState, useEffect, useContext } from "react";
 import { View } from "react-native";
-import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon } from "native-base";
+import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon, Footer, FooterTab } from "native-base";
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
+// import { NavigationContainer } from '@react-navigation/native';
+// import { createStackNavigator } from '@react-navigation/stack';
+
+import LoadingScreen from './LoadingScreen';
+import MountainScreen from './MountainScreen';
+
 let db = firestore();
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = (props) => {
   
+  const {navigation} = props;
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
@@ -45,35 +52,55 @@ const HomeScreen = ({navigation}) => {
   }, [user]);
   
   // could return a loading screen instead
-  if (initializing) return null; 
+  if (initializing) return <LoadingScreen/>; 
 
   
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Home Screen</Text>
+    <Container>
+      {/* <Text>Home Screen</Text> */}
       {
         user?
-        <>
-        <Text>Welcome!</Text>
-          <Text>You're logged in!</Text>
-          <Button onPress={() => navigation.navigate('Mountain', {user})}>
-            <Text>Mountain Screen</Text>
-          </Button>
-          <Button onPress={signOut}>
-            <Text>Sign out</Text>
-          </Button>
-        </>
-        :
-        <>
-          <Button onPress={() => navigation.navigate('Login')}>
+        // <>
+        // <Text>Welcome!</Text>
+        //   <Text>You're logged in!</Text>
+        //   <Button onPress={() => navigation.navigate('Mountain', {user})}>
+        //     <Text>Mountain Screen</Text>
+        //   </Button>
+        //   <Button onPress={signOut}>
+        //     <Text>Sign out</Text>
+        //   </Button>
+        // </>
+        
+          <>
+          {/* <Header /> */}
+          <Content >
+            <MountainScreen user={user} {...props}/>
+          </Content>
+          <Footer>
+            <FooterTab>
+              <Button active>
+                <Text>Mood</Text>
+              </Button>
+              <Button active>
+                <Text>Habbits</Text>
+              </Button>
+              <Button onPress={signOut}>
+                <Text>Sign Out</Text>
+              </Button>
+            </FooterTab>
+          </Footer>
+          </>
+          :
+          <View>
+          <Button full light info onPress={() => navigation.navigate('Login')} style={{margin:5}}>
             <Text>Login Screen</Text>
           </Button>
-          <Button onPress={() => navigation.navigate('Register')}>
+          <Button full onPress={() => navigation.navigate('Register')} style={{margin:5}}>
             <Text>Register Screen</Text>
           </Button>
-        </>
+          </View>
       }
-    </View>
+    </Container>
   );
 }
 export default HomeScreen;
