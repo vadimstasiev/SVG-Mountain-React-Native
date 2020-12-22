@@ -60,6 +60,7 @@ const Notes = ({route, navigation}) => {
    }
 
    useEffect(() => {
+      navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
       const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
          let data = await querySnapshot.data()
          // console.log('querySnapshot.data()', querySnapshot.data())
@@ -88,13 +89,13 @@ const Notes = ({route, navigation}) => {
    return <Container>
          <Header>
             <Text style={{
-               textAlign: 'center',
-               fontWeight: 'bold',
-               fontSize: 18,
-               marginTop: 15,
-               width: 200,
-               color: 'white',
-            }}>Write about your day</Text>
+                  textAlign: 'center',
+                  fontWeight: 'bold',
+                  fontSize: 16,
+                  marginTop: 15,
+                  width: 200,
+                  color: 'white',
+               }}>Write about your day</Text>
         </Header>
       <Content padder>
       <Form>
