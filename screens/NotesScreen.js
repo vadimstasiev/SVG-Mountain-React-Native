@@ -30,11 +30,12 @@ import Svg, {
   Pattern,
   Mask,
 } from "react-native-svg";
+import { sub } from "react-native-reanimated";
 
 let db = firestore();
 
-const Notes = (props) => {
-   const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = props.route.params;
+const Notes = ({route, navigation}) => {
+   const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = route.params;
    
    const [input, setInput] = useState('');
    const [firestoreInput, setFirestoreInput] = useState();
@@ -74,8 +75,12 @@ const Notes = (props) => {
       // markComplete(13, '#9B59B6');
       // markComplete(31, '#9B59B6');
       // console.log('helloasasda', snapshotData);
+      const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
+         submit();
+      })
       return () => {
-         unsubscribe()
+         unsubscribe();
+         navUnsubscribe();
       }
    }, [firestoreInput, firestoreMood]);
  
