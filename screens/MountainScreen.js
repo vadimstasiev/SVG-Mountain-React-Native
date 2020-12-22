@@ -42,7 +42,7 @@ const Mountain = ({navigation, route}) => {
   // create the mood - color array
 
    const { user } = route.params;
-   const monthSvgScreen = 'January20';
+   const monthSvgScreen = 'January21';
    const defaultColor = "#fff";
    const selectedColor = "yellow";
    // const [color, setColor] = useState('#C0392B');
@@ -56,7 +56,9 @@ const Mountain = ({navigation, route}) => {
       '#2980B9':'Fucking Terrible'
    }
 
-  const [polygons, setPolygons] = useState(
+
+   const [snapshotData, setSnapshotData] = useState([]);
+   const [polygons, setPolygons] = useState(
    [
       {
          "id":1,
@@ -511,10 +513,11 @@ const Mountain = ({navigation, route}) => {
       console.log('doc.id: ', id, 'mood: ', color)
       setPolygons(
       [...polygons.map(polygon => {
-         // console.log('here', polygon.id, id)
-         // String(polygon.id)===id?console.log(here,polygon):null;
-         return String(polygon.id)!==String(id)?polygon:
-         {...polygon,
+         if(String(polygon.id)===String(id)){
+            console.log('String(polygon.id)!==String(id)', String(polygon.id), String(id))
+            return polygon;
+         } 
+         return {...polygon,
             fill: color,
             day: {
                x:polygon.day.x,
@@ -526,20 +529,41 @@ const Mountain = ({navigation, route}) => {
       ]);
    }
 
-   // useEffect(() => {
-   //       const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
-   //          querySnapshot.forEach(doc =>{
-   //             markComplete(doc.id, Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
-   //          })
+   // const updateMountain=()=>{
+   //    const polygonData = snapshotData;
+   //    setPolygons(
+   //       [...polygons.map(polygon => {
+   //          // console.log('here', polygon.id, id)
+   //          // String(polygon.id)===id?console.log(here,polygon):null;
+   //          return String(polygon.id)!==String(id)?polygon:
+   //          {...polygon,
+   //             fill: color,
+   //             day: {
+   //                x:polygon.day.x,
+   //                y:polygon.day.y,
+   //                fill: "white"
+   //             }
+   //          }
    //       })
-   //       .catch((error) => {
-   //          console.log("Error getting data:", error)
-   //       });
-   //       console.log('helloasasda');
-   //       return () => {
-   //          unsubscribe()
-   //        }
-   // })
+   //       ]);
+   // }
+
+   useEffect(() => {
+         // const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
+         //    querySnapshot.forEach(doc =>{
+         //       markComplete(doc.id, Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
+         //    })
+         // })
+         markComplete(13, '#9B59B6');
+         markComplete(31, '#9B59B6');
+         // .catch((error) => {
+         //    console.log("Error getting data:", error)
+         // });
+         console.log('helloasasda');
+         // return () => {
+         //    unsubscribe()
+         //  }
+   }, [polygons])
 
    return (
       <View style={styles.container}>

@@ -63,7 +63,8 @@ const Notes = (props) => {
    }
 
    const submitMood = () => {
-      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).update({
+      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
+         message: input,
          mood
       })
       .then((docRef) => {
