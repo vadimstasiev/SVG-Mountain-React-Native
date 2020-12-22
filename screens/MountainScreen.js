@@ -57,7 +57,7 @@ const Mountain = ({navigation, route}) => {
    }
 
 
-   const [snapshotData, setSnapshotData] = useState([]);
+   const [firestoreSvgData, setFirestoreSvgData] = useState({});
    const [polygons, setPolygons] = useState(
    [
       {
@@ -549,21 +549,27 @@ const Mountain = ({navigation, route}) => {
    // }
 
    useEffect(() => {
-         // const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
-         //    querySnapshot.forEach(doc =>{
-         //       markComplete(doc.id, Object.keys(moods).find(key => moods[key] === doc.data()["mood"]));
-         //    })
-         // })
-         markComplete(13, '#9B59B6');
-         markComplete(31, '#9B59B6');
-         // .catch((error) => {
-         //    console.log("Error getting data:", error)
-         // });
-         console.log('helloasasda');
-         // return () => {
-         //    unsubscribe()
-         //  }
-   }, [])
+         const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
+            querySnapshot.forEach(doc =>{
+               // let data = (
+               //    snapshotData.filter(data => data.id!==doc.id),
+               //    {id:doc.id, fill: Object.keys(moods).find(key => moods[key] === doc.data()["mood"])});
+               // console.log(doc.id)
+               // console.log(doc.data())
+               setFirestoreSvgData({
+                  ...firestoreSvgData,
+                  [doc.id]:doc.data()
+               })
+            })
+            console.log('firestoreSvgData', firestoreSvgData)
+         })
+         // markComplete(13, '#9B59B6');
+         // markComplete(31, '#9B59B6');
+         // console.log('helloasasda', snapshotData);
+         return () => {
+            unsubscribe()
+         }
+   }, [polygons])
 
    return (
       <View style={styles.container}>
