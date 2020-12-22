@@ -47,7 +47,7 @@ const Notes = (props) => {
    
    
 
-   const submit = (submitMood=mood) => {
+   const submit = (submitInput=input, submitMood=mood) => {
       console.log(user.uid, monthSvgScreen, dayNum)
       db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
          message: input,
@@ -62,10 +62,12 @@ const Notes = (props) => {
       const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
          let data = await querySnapshot.data()
          // console.log('querySnapshot.data()', querySnapshot.data())
-         setFirestoreInput(data.message);
-         setInput(firestoreInput)
-         setFirestoreMood(data.mood)
+         if(input==='' || firestoreInput!==data.message){
+            setFirestoreInput(data.message);
+            setInput(firestoreInput)
+         }
          if(mood === defaultMood){
+            setFirestoreMood(data.mood)
             setMood(firestoreMood)
          }
       })
@@ -91,7 +93,7 @@ const Notes = (props) => {
         </Header>
       <Content padder>
       <Form>
-         <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={submit}
+         <Textarea rowSpan={5} onChangeText={async (text)=>{setInput(text);submit(input);}} defaultValue={input}
          bordered placeholder="" />
          <Text style={{
             textAlign: 'center',
@@ -103,7 +105,7 @@ const Notes = (props) => {
          <ColorPalette
                onChange={ color => {
                   setMood(moods[color]);
-                  submit(moods[color]);
+                  submit(input, moods[color]);
                }}
                value={Object.keys(moods).find(key => moods[key] === mood)}
                colors={colorOptions}
