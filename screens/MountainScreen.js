@@ -563,7 +563,7 @@ const Mountain = ({navigation, route}) => {
          // return () => {
          //    unsubscribe()
          //  }
-   }, [polygons])
+   }, [])
 
    return (
       <View style={styles.container}>
