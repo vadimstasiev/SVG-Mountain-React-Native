@@ -65,8 +65,10 @@ const Notes = (props) => {
          setFirestoreInput(data.message);
          setInput(firestoreInput)
          setFirestoreMood(data.mood)
+         console.log(mood)
          if(mood === defaultMood){
-            setMood(firestoreMood)
+            setMood(data.mood);
+            
          }
       })
       // markComplete(13, '#9B59B6');
