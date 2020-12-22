@@ -550,26 +550,44 @@ const Mountain = ({navigation, route}) => {
 
    useEffect(() => {
          const unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
+            let tempSvgData = {};
             querySnapshot.forEach(doc =>{
                // let data = (
                //    snapshotData.filter(data => data.id!==doc.id),
                //    {id:doc.id, fill: Object.keys(moods).find(key => moods[key] === doc.data()["mood"])});
                // console.log(doc.id)
-               // console.log(doc.data())
-               setFirestoreSvgData({
-                  ...firestoreSvgData,
-                  [doc.id]:doc.data()
-               })
+               // console.log({...firestoreSvgData,
+               //    [doc.id]:doc.data()
+               // })
+               tempSvgData[doc.id]=doc.data()
             })
-            console.log('firestoreSvgData', firestoreSvgData)
+            setFirestoreSvgData(tempSvgData);
          })
+
+         setPolygons(polygons.map(polygon => {
+            let firestorePolygon = firestoreSvgData[polygon.id]
+            if(firestorePolygon){
+               return {
+                  ...polygon,
+                  fill: Object.keys(moods).find(key => moods[key] === firestorePolygon.mood),
+                  day: {
+                     x:polygon.day.x,
+                     y:polygon.day.y,
+                     fill: "white"
+                  }
+               }
+            }
+            return polygon;
+         }))
+
+         // console.log('firestoreSvgData', firestoreSvgData)
          // markComplete(13, '#9B59B6');
          // markComplete(31, '#9B59B6');
          // console.log('helloasasda', snapshotData);
          return () => {
             unsubscribe()
          }
-   }, [polygons])
+   }, [firestoreSvgData])
 
    return (
       <View style={styles.container}>
