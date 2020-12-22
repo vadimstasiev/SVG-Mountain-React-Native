@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 import { Container, Header, Text, Form, Textarea, Button, Item, Label, Input, Content, Icon, Footer, FooterTab} from "native-base";
 import ColorPalette from 'react-native-color-palette';
 
@@ -91,8 +91,19 @@ const Notes = (props) => {
         </Header>
       <Content padder>
       <Form>
-         <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={submit}
+         <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={()=>submit()}
          bordered placeholder="" />
+         {/* <View style={styles.textAreaContainer} >
+            <TextInput
+               style={styles.textArea}
+               underlineColorAndroid="transparent"
+               placeholder="Type something"
+               placeholderTextColor="grey"
+               numberOfLines={10}
+               multiline={true}
+               onChangeText={setInput} value={input} onEndEditing={submit}
+            />
+         </View> */}
          <Text style={{
             textAlign: 'center',
             fontWeight: 'bold',
@@ -113,5 +124,18 @@ const Notes = (props) => {
       </Content>
    </Container>
 }
+
+// const styles = StyleSheet.create({
+//    textAreaContainer: {
+//      borderColor: 'grey',
+//      borderWidth: 1,
+//      padding: 5
+//    },
+//    textArea: {
+//      height: 150,
+//      justifyContent: "flex-start",
+//      textAlignVertical: 'top'
+//    }
+//  })
 
 export default Notes;
