@@ -7,7 +7,7 @@ import firestore from "@react-native-firebase/firestore";
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
 
-import LoadingScreen from './LoadingScreen';
+import InitialLogoScreen from './InitialLogoScreen';
 import MountainScreen from './MountainScreen';
 
 let db = firestore();
@@ -52,7 +52,7 @@ const HomeScreen = (props) => {
   }, [user]);
   
   // could return a loading screen instead
-  if (initializing) return <LoadingScreen/>; 
+  if (initializing) return <InitialLogoScreen/>; 
 
   
   return (
