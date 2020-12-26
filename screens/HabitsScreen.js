@@ -22,6 +22,7 @@ const TodoList = (props) => {
    const [habit, setHabit] = useState(props.habit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
+      console.log('update', props.habit.id, habit.name)
       props.editHabit(props.habit.id, habit.name);
    }
    return (
@@ -126,6 +127,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
          // clear the value of the textfield
          await db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[Date.now()]:habitMessage})
          .catch((error) => {
+            db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').set({[Date.now()]:habitMessage})
             console.error("Error adding document: ", error);
          });
          setTitle("");
@@ -138,9 +140,13 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
 
   };
 
-  const editHabit = (id, title) => {
-      setSortHabbits([...habits.filter((habit)=>habit.id!==id), { id: id, name: title}]);
+  const editHabit = (id, habbitUpdate) => {
+      // setSortHabbits([...habits.filter((habit)=>habit.id!==id), { id: id, name: title}]);
       // console.log(id, title)
+      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[id]:habbitUpdate})
+      .catch((error) => {
+         console.error("Error adding document: ", error);
+      });
   }
 
 
@@ -168,16 +174,21 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
             let data = await querySnapshot.data()
             let firebaseHabits = []
-            //  console.log('data', data)
+             console.log('data', data)
             if (data) {
                for (const id in data) {
                   const name = data[id];
                   // console.log('here', id, name)
                   firebaseHabits.push({id, name})
-               }         
-            habits.map((habit) => {
-               firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
+               }
+            // habits.map((habit) => {
+            //    firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
+            // })
+            let localHabbits;
+            firebaseHabits.map((habit) => {
+               localHabbits = habits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
             })
+            console.log(firebaseHabits)
             setSortHabbits([...habits, ...firebaseHabits]);
          }
          })
