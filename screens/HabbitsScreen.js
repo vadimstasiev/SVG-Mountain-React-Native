@@ -1,157 +1,203 @@
-import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
-import { Container, Header, Text, Form, Textarea, Button, Item, Label, Input, Content, Icon, Footer, FooterTab} from "native-base";
-import ColorPalette from 'react-native-color-palette';
+import React, { useState, useEffect, useRef } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Button,
+  TextInput,
+  ScrollView,
+  TouchableOpacity
+} from "react-native";
+import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base';
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-import auth, { firebase } from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
 
-
-import Svg, {
-  Circle,
-  Ellipse,
-  G,
-  TSpan,
-  TextPath,
-  Path,
-  Text as SvgText,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-} from "react-native-svg";
-import { sub } from "react-native-reanimated";
-
-let db = firestore();
-
-const Notes = ({route, navigation}) => {
-   const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = route.params;
-   
-   const [input, setInput] = useState('');
-   const [firestoreInput, setFirestoreInput] = useState();
-
-   // const [color, setColor] = useState('#C0392B');
-   
-   const [mood, setMood] = useState(defaultMood);
-   const [firestoreMood, setFirestoreMood] = useState();
-
-   
-   
-
-   const submit = (submitMood=mood) => {
-      console.log(user.uid, monthSvgScreen, dayNum)
-      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
-         message: input,
-         mood: submitMood
-      })
-      .catch((error) => {
-         console.error("Error adding document: ", error);
-      });
+const TodoList = (props) => {
+   const inputReference = useRef();
+   const [isEditing, setIsEditing] = useState('false');
+   const [habbit, setHabbit] = useState(props.habbit)
+   const editClicked=()=>{
+      setIsEditing(!isEditing);
+      props.editHabbit(props.habbit.key, habbit.name);
    }
-
-   useEffect(() => {
-      navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
-      let unsubscribe = () => {};
-      try {
-         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
-            let data = await querySnapshot.data()
-            // console.log('querySnapshot.data()', querySnapshot.data())
-            if (data){
-               setFirestoreInput(data.message);
-               setInput(firestoreInput)
-               setFirestoreMood(data.mood)
-               console.log(mood)
-               if(mood === defaultMood){
-                  setMood(data.mood);
-                  
-               }
+   return (
+     <View style={styles.listTile}>
+      {/* <Text style={styles.title}>{props.habbit.name}</Text> */}
+      {isEditing?<></>:
+         <Icon
+            name="delete"
+            size={20}
+            color="red"
+            onPress={() => props.deleteHabbit(props.habbit.key)}
+         />
+      }
+      <Card style={isEditing?{width: "85%"}:{width: "70%"}}>
+         <CardItem>
+            <Body>
+            {isEditing?
+               <Text >
+               {props.habbit.name}
+               {'     '}
+               </Text>
+            :
+            <>
+               <TextInput
+               defaultValue={String(props.habbit.name)}
+               autoFocus={true}
+               // onEndEditing={()=>{
+               //    editClicked()
+               // }}
+               onChangeText={value => setHabbit({...habbit, name: value})}
+               />
+               {/* {console.log(inputReference)} */}
+            </>
             }
-         })
-      } catch (error) {
-         console.log('Firestore error', error);
-      }
-
-      // markComplete(13, '#9B59B6');
-      // markComplete(31, '#9B59B6');
-      // console.log('helloasasda', snapshotData);
-      const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
-         submit();
-      })
-      return () => {
-         unsubscribe();
-         navUnsubscribe();
-      }
-   }, [firestoreInput, firestoreMood]);
- 
-
-   return <Container>
-         <Header>
-            <Text style={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                  marginTop: 15,
-                  width: 200,
-                  color: 'white',
-               }}>Write about your day</Text>
-        </Header>
-      <Content padder>
-      <Form>
-         <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={()=>submit()}
-         bordered placeholder="" />
-         {/* <View style={styles.textAreaContainer} >
-            <TextInput
-               style={styles.textArea}
-               underlineColorAndroid="transparent"
-               placeholder="Type something"
-               placeholderTextColor="grey"
-               numberOfLines={10}
-               multiline={true}
-               onChangeText={setInput} value={input} onEndEditing={submit}
+            </Body>
+         </CardItem>
+      </Card>
+      {isEditing?
+      <TouchableOpacity
+      style={styles.button}
+      onPress={editClicked}
+      >
+        <Icon
+            name={"edit"}
+            size={20}
+            color="#666666"
+            // onPress={() => props.checkHabbit(props.habbit.key)}
             />
-         </View> */}
-         <Text style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 18,
-            marginTop: 0,
-            width: 200,
-         }}>{mood}</Text>
-         <ColorPalette
-               onChange={ color => {
-                  setMood(moods[color]);
-                  submit(moods[color]);
-               }}
-               value={Object.keys(moods).find(key => moods[key] === mood)}
-               colors={colorOptions}
-               titleStyles={{display:"none"}}
+      </TouchableOpacity>
+      :
+      <TouchableOpacity
+      style={styles.button}
+      onPress={editClicked}
+      >
+        <Icon
+            name={"check"}
+            size={20}
+            color="green"
+            onEndEditing={()=>{
+               editClicked()
+            }}
             />
-      </Form>
-      </Content>
-   </Container>
+      </TouchableOpacity>}
+      
+     </View>
+   );
+ }
+
+
+const HabbitsScreen = ({navigation, user}) => {
+
+  const [title, setTitle] = useState("");
+
+  // iniitalize empty object habbit
+  const [habbit, setTodo] = useState({});
+
+  // Initalize empty array to store habbits
+  const [habbits, setHabbits] = useState([]);
+
+  // function to add habbit object in habbit list
+  const addHabbit = () => {
+    if (title.length > 0) {
+      // Add habbit to the list
+      setHabbits([...habbits, { key: Date.now(), name: title}]);
+      // clear the value of the textfield
+      setTitle("");
+    }
+  };
+
+  const editHabbit = (id, title) => {
+      setHabbits([...habbits.filter((habbit)=>habbit.key!==id), { key: id, name: title}])
+      console.log(id, title)
+  }
+
+
+  // function to delete habbit from the habbit list
+  const deleteHabbit = id => {
+    // loop through habbit list and return habbits that don't match the id
+    // update the state using setHabbits function
+    setHabbits(habbits.filter(habbit => {
+      return habbit.key !== id;
+    }));
+  };
+
+  useEffect(() => {
+    console.log(habbits.length, "TodoList length");
+    //console.log(habbits);
+  }, [habbits]);
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.habbit}>
+        <TextInput
+          placeholder="Add a Habbit"
+          value={title}
+          onChangeText={value => setTitle(value)}
+          style={styles.textbox}
+        />
+        <Button title="Add" color="#4050b5" onPress={() => addHabbit()} />
+      </View>
+
+      <ScrollView >
+        {habbits.map(habbit => (
+          <TodoList
+            key={habbit.key}
+            habbit={habbit}
+            editHabbit={editHabbit}
+            deleteHabbit={deleteHabbit}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
 }
 
-// const styles = StyleSheet.create({
-//    textAreaContainer: {
-//      borderColor: 'grey',
-//      borderWidth: 1,
-//      padding: 5
-//    },
-//    textArea: {
-//      height: 150,
-//      justifyContent: "flex-start",
-//      textAlignVertical: 'top'
-//    }
-//  })
+const styles = StyleSheet.create({
+   statusBar: {
+      backgroundColor: "#4050b5",
+      color: "#fff",
+      width: "100%",
+      height: 30
+   },
+   container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "flex-start"
+   },
+   habbit: {
+      flexDirection: "row",
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center"
+   },
+   textbox: {
+      borderWidth: 1,
+      borderColor: "#4050b5",
+      borderRadius: 8,
+      padding: 10,
+      margin: 10,
+      width: "80%", 
+      fontSize:16,
+      height: 39
+   },
+   listTile: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      backgroundColor: "white",
+      paddingLeft: 10,
+      paddingRight: 10,
+      borderBottomColor: "#666666"
+   },
+   button: {
+      alignItems: "center",
+      backgroundColor: "white",
+      padding: 10
+    },
+});
 
-export default Notes;
+export default HabbitsScreen;

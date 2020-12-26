@@ -4,11 +4,10 @@ import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Ico
 import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 
-// import { NavigationContainer } from '@react-navigation/native';
-// import { createStackNavigator } from '@react-navigation/stack';
 
 import InitialLogoScreen from './InitialLogoScreen';
 import MountainScreen from './MountainScreen';
+import HabbitsScreen from './HabbitsScreen';
 
 let db = firestore();
 
@@ -18,21 +17,13 @@ const HomeScreen = (props) => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
-  // const [userData, setUserData] = useState({});
+  const [screen, setScreen] = useState('Mood');
 
   // Handle user state changes
   const onAuthStateChanged = async user => {
     if(user){
       setUser(user);
-      // db.collection("users").doc(user.uid).get().then((doc)=>{
-      //   setUserData(doc.data());
-      // })
-      // let currentUser = auth().currentUser;
       await auth().currentUser.reload();
-      // await db.collection("users").doc(user.uid).set({
-      //   displayName: user.displayName,
-      //   email: user.email
-      // })
       console.log(user)
     }
     if (initializing) setInitializing(false);
@@ -49,39 +40,30 @@ const HomeScreen = (props) => {
   useEffect(() => {
     const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
     return subscriber; // unsubscribe on unmount
-  }, [user]);
+  }, [user, screen]);
   
-  // could return a loading screen instead
   if (initializing) return <InitialLogoScreen/>; 
 
   
   return (
     <Container>
-      {/* <Text>Home Screen</Text> */}
       {
         user?
-        // <>
-        // <Text>Welcome!</Text>
-        //   <Text>You're logged in!</Text>
-        //   <Button onPress={() => navigation.navigate('Mountain', {user})}>
-        //     <Text>Mountain Screen</Text>
-        //   </Button>
-        //   <Button onPress={signOut}>
-        //     <Text>Sign out</Text>
-        //   </Button>
-        // </>
-        
           <>
-          {/* <Header /> */}
           <Content >
+          {screen==='Mood'?
             <MountainScreen user={user} {...props}/>
+            :<></>}
+          {screen==='Habbits'?
+            <HabbitsScreen user={user} {...props}/>
+          :<></>}
           </Content>
           <Footer>
             <FooterTab>
-              <Button active>
+              <Button active={screen==='Mood'} onPress={(e)=>setScreen('Mood')}>
                 <Text>Mood</Text>
               </Button>
-              <Button active>
+              <Button active={screen==='Habbits'} onPress={(e)=>setScreen('Habbits')}>
                 <Text>Habbits</Text>
               </Button>
               <Button onPress={signOut}>
