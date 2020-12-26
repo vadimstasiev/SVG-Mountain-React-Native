@@ -1,157 +1,161 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
-import { Container, Header, Text, Form, Textarea, Button, Item, Label, Input, Content, Icon, Footer, FooterTab} from "native-base";
-import ColorPalette from 'react-native-color-palette';
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  View,
+  Button,
+  ScrollView
+} from "react-native";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
-import auth, { firebase } from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
+
+const TodoList = (props) => {
+   return (
+     <View style={styles.listTile}>
+       <Icon
+         name={props.todo.isChecked ? "check-circle" : "radio-button-unchecked"}
+         style={styles.leading}
+         size={20}
+         color="#666666"
+         onPress={() => props.checkTodo(props.todo.key)}
+       />
+       <Text style={styles.title}>{props.todo.name}</Text>
+       <Icon
+         name="delete"
+         style={styles.trailing}
+         size={20}
+         color="#666666"
+         onPress={() => props.deleteTodo(props.todo.key)}
+       />
+     </View>
+   );
+ }
 
 
-import Svg, {
-  Circle,
-  Ellipse,
-  G,
-  TSpan,
-  TextPath,
-  Path,
-  Text as SvgText,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-} from "react-native-svg";
-import { sub } from "react-native-reanimated";
+const HabbitsScreen = () => {
+  const [title, setTitle] = useState("");
 
-let db = firestore();
+  // iniitalize empty object todo
+  const [todo, setTodo] = useState({});
 
-const Notes = ({route, navigation}) => {
-   const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = route.params;
-   
-   const [input, setInput] = useState('');
-   const [firestoreInput, setFirestoreInput] = useState();
+  // Initalize empty array to store todos
+  const [todos, setTodos] = useState([]);
 
-   // const [color, setColor] = useState('#C0392B');
-   
-   const [mood, setMood] = useState(defaultMood);
-   const [firestoreMood, setFirestoreMood] = useState();
+  // function to add todo object in todo list
+  const addTodo = () => {
+    if (title.length > 0) {
+      // Add todo to the list
+      setTodos([...todos, { key: Date.now(), name: title, isChecked: false }]);
+      // clear the value of the textfield
+      setTitle("");
+    }
+  };
 
-   
-   
-
-   const submit = (submitMood=mood) => {
-      console.log(user.uid, monthSvgScreen, dayNum)
-      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
-         message: input,
-         mood: submitMood
+  // function to mark todo as checked or unchecked
+  const checkTodo = id => {
+    // loop through todo list and look for the the todo that matches the given id param
+    // update the state using setTodos function
+    setTodos(
+      todos.map(todo => {
+        if (todo.key === id) {
+          todo.isChecked = !todo.isChecked;
+        }
+        return todo;
       })
-      .catch((error) => {
-         console.error("Error adding document: ", error);
-      });
-   }
+    );
+  };
 
-   useEffect(() => {
-      navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
-      let unsubscribe = () => {};
-      try {
-         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
-            let data = await querySnapshot.data()
-            // console.log('querySnapshot.data()', querySnapshot.data())
-            if (data){
-               setFirestoreInput(data.message);
-               setInput(firestoreInput)
-               setFirestoreMood(data.mood)
-               console.log(mood)
-               if(mood === defaultMood){
-                  setMood(data.mood);
-                  
-               }
-            }
-         })
-      } catch (error) {
-         console.log('Firestore error', error);
-      }
+  // function to delete todo from the todo list
+  const deleteTodo = id => {
+    // loop through todo list and return todos that don't match the id
+    // update the state using setTodos function
+    setTodos(todos.filter(todo => {
+      return todo.key !== id;
+    }));
+  };
 
-      // markComplete(13, '#9B59B6');
-      // markComplete(31, '#9B59B6');
-      // console.log('helloasasda', snapshotData);
-      const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
-         submit();
-      })
-      return () => {
-         unsubscribe();
-         navUnsubscribe();
-      }
-   }, [firestoreInput, firestoreMood]);
- 
+  useEffect(() => {
+    console.log(todos.length, "TodoList length");
+    //console.log(todos);
+  }, [todos]);
 
-   return <Container>
-         <Header>
-            <Text style={{
-                  textAlign: 'center',
-                  fontWeight: 'bold',
-                  fontSize: 16,
-                  marginTop: 15,
-                  width: 200,
-                  color: 'white',
-               }}>Write about your day</Text>
-        </Header>
-      <Content padder>
-      <Form>
-         <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={()=>submit()}
-         bordered placeholder="" />
-         {/* <View style={styles.textAreaContainer} >
-            <TextInput
-               style={styles.textArea}
-               underlineColorAndroid="transparent"
-               placeholder="Type something"
-               placeholderTextColor="grey"
-               numberOfLines={10}
-               multiline={true}
-               onChangeText={setInput} value={input} onEndEditing={submit}
-            />
-         </View> */}
-         <Text style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 18,
-            marginTop: 0,
-            width: 200,
-         }}>{mood}</Text>
-         <ColorPalette
-               onChange={ color => {
-                  setMood(moods[color]);
-                  submit(moods[color]);
-               }}
-               value={Object.keys(moods).find(key => moods[key] === mood)}
-               colors={colorOptions}
-               titleStyles={{display:"none"}}
-            />
-      </Form>
-      </Content>
-   </Container>
+  return (
+    <View style={styles.container}>
+      <View style={styles.statusBar}></View>
+      {/* <AppBar /> */}
+      <View style={styles.todo}>
+        <TextInput
+          placeholder="Add a todo"
+          value={title}
+          onChangeText={value => setTitle(value)}
+          style={styles.textbox}
+        />
+        <Button title="Add" color="#7F39FB" onPress={() => addTodo()} />
+      </View>
+
+      <ScrollView>
+        {todos.map(todo => (
+          <TodoList
+            key={todo.key}
+            todo={todo}
+            checkTodo={checkTodo}
+            deleteTodo={deleteTodo}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
 }
 
-// const styles = StyleSheet.create({
-//    textAreaContainer: {
-//      borderColor: 'grey',
-//      borderWidth: 1,
-//      padding: 5
-//    },
-//    textArea: {
-//      height: 150,
-//      justifyContent: "flex-start",
-//      textAlignVertical: 'top'
-//    }
-//  })
+const styles = StyleSheet.create({
+   statusBar: {
+      backgroundColor: "#7F39FB",
+      color: "#fff",
+      width: "100%",
+      height: 30
+   },
+   container: {
+      flex: 1,
+      backgroundColor: "#fff",
+      alignItems: "center",
+      justifyContent: "flex-start"
+   },
+   todo: {
+      flexDirection: "row",
+      width: "100%",
+      justifyContent: "center",
+      alignItems: "center"
+   },
+   textbox: {
+      borderWidth: 1,
+      borderColor: "#7F39FB",
+      borderRadius: 8,
+      padding: 10,
+      margin: 10,
+      width: "80%"
+   },
+   listTile: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-around",
+      alignItems: "center",
+      backgroundColor: "white",
+      padding: 10,
+      borderBottomWidth: 0.5,
+      borderBottomColor: "#666666"
+   },
+   leading: {
+      width: "20%"
+   },
+   title: {
+      width: "60%",
+      fontSize: 18
+   },
+   trailing: {
+      width: "20%"
+   }
+});
 
-export default Notes;
+export default HabbitsScreen;
