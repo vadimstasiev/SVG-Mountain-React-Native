@@ -15,8 +15,10 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 const TodoList = (props) => {
    const inputReference = useRef();
    const [isEditing, setIsEditing] = useState('false');
+   const [habbit, setHabbit] = useState(props.habbit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
+      props.editHabbit(props.habbit.key, habbit);
    }
    return (
      <View style={styles.listTile}>
@@ -45,6 +47,7 @@ const TodoList = (props) => {
                // onEndEditing={()=>{
                //    editClicked()
                // }}
+               onChangeText={value => setHabbit(value)}
                />
                {/* {console.log(inputReference)} */}
             </>
@@ -102,11 +105,11 @@ const HabbitsScreen = ({navigation, user}) => {
       // clear the value of the textfield
       setTitle("");
     }
-    console.log(habbits)
   };
 
   const editHabbit = (id, title) => {
-      setHabbits([...habbits.filter(habbit.key!==id), { key: id, name: title}])
+      setHabbits([...habbits.filter((habbit)=>habbit.key!==id), { key: id, name: title}])
+      console.log(id, title)
   }
 
 
@@ -141,6 +144,7 @@ const HabbitsScreen = ({navigation, user}) => {
           <TodoList
             key={habbit.key}
             habbit={habbit}
+            editHabbit={editHabbit}
             deleteHabbit={deleteHabbit}
           />
         ))}
