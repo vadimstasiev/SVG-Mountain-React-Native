@@ -4,13 +4,18 @@ import {
   Text,
   View,
   Button,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from "react-native";
 import { Container, Header, Content, Card, CardItem,  Body, Input } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 
 const TodoList = (props) => {
+   const [isEditing, setIsEditing] = useState('false');
+   const editClicked=()=>{
+      setIsEditing(!isEditing);
+   }
    return (
      <View style={styles.listTile}>
       {/* <Text style={styles.title}>{props.todo.name}</Text> */}
@@ -32,12 +37,17 @@ const TodoList = (props) => {
             </Body>
          </CardItem>
       </Card>
-            <Icon
-               name={"edit"}
-               size={20}
-               color="#666666"
-               onPress={() => props.checkTodo(props.todo.key)}
+      <TouchableOpacity
+        style={styles.button}
+        onPress={editClicked}
+      >
+        <Icon
+            name={"edit"}
+            size={20}
+            color="#666666"
+            // onPress={() => props.checkTodo(props.todo.key)}
             />
+      </TouchableOpacity>
       
      </View>
    );
@@ -159,8 +169,13 @@ const styles = StyleSheet.create({
       borderBottomColor: "#666666"
    },
    card: {
-      width: "90%",
+      width: "85%",
    },
+   button: {
+      alignItems: "center",
+      backgroundColor: "white",
+      padding: 10
+    },
 });
 
 export default HabbitsScreen;
