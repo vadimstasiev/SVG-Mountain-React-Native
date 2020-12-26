@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   Text,
   View,
   Button,
+  TextInput,
   ScrollView,
   TouchableOpacity
 } from "react-native";
-import { Container, Header, Content, Card, CardItem,  Body, Input } from 'native-base';
+import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 
 const TodoList = (props) => {
+   const inputReference = useRef();
    const [isEditing, setIsEditing] = useState('false');
    const editClicked=()=>{
       setIsEditing(!isEditing);
@@ -19,27 +21,41 @@ const TodoList = (props) => {
    return (
      <View style={styles.listTile}>
       {/* <Text style={styles.title}>{props.habbit.name}</Text> */}
-      <Card style={styles.card}>
-         {/* <CardItem header>
-            <Icon
-               name="delete"
-               size={20}
-               color="#666666"
-               onPress={() => props.deleteHabbit(props.habbit.key)}
-            />
-         </CardItem> */}
+      {isEditing?<></>:
+         <Icon
+            name="delete"
+            size={20}
+            color="red"
+            onPress={() => props.deleteHabbit(props.habbit.key)}
+         />
+      }
+      <Card style={isEditing?{width: "85%"}:{width: "70%"}}>
          <CardItem>
             <Body>
+            {isEditing?
                <Text >
                {props.habbit.name}
                {'     '}
                </Text>
+            :
+            <>
+               <TextInput
+               defaultValue={props.habbit.name}
+               autoFocus={true}
+               // onEndEditing={()=>{
+               //    editClicked()
+               // }}
+               />
+               {/* {console.log(inputReference)} */}
+            </>
+            }
             </Body>
          </CardItem>
       </Card>
+      {isEditing?
       <TouchableOpacity
-        style={styles.button}
-        onPress={editClicked}
+      style={styles.button}
+      onPress={editClicked}
       >
         <Icon
             name={"edit"}
@@ -48,6 +64,20 @@ const TodoList = (props) => {
             // onPress={() => props.checkHabbit(props.habbit.key)}
             />
       </TouchableOpacity>
+      :
+      <TouchableOpacity
+      style={styles.button}
+      onPress={editClicked}
+      >
+        <Icon
+            name={"check"}
+            size={20}
+            color="green"
+            onEndEditing={()=>{
+               editClicked()
+            }}
+            />
+      </TouchableOpacity>}
       
      </View>
    );
@@ -68,30 +98,17 @@ const HabbitsScreen = ({navigation, user}) => {
   const addHabbit = () => {
     if (title.length > 0) {
       // Add habbit to the list
-      setHabbits([...habbits, { key: Date.now(), name: title, isChecked: false }]);
+      setHabbits([...habbits, { key: Date.now(), name: title}]);
       // clear the value of the textfield
       setTitle("");
     }
     console.log(habbits)
   };
 
-  const editHabbits = (key, message) => {
-
+  const editHabbit = (id, title) => {
+      setHabbits([...habbits.filter(habbit.key!==id), { key: id, name: title}])
   }
 
-  // function to mark habbit as checked or unchecked
-  const checkHabbit = id => {
-    // loop through habbit list and look for the the habbit that matches the given id param
-    // update the state using setHabbits function
-    setHabbits(
-      habbits.map(habbit => {
-        if (habbit.key === id) {
-          habbit.isChecked = !habbit.isChecked;
-        }
-        return habbit;
-      })
-    );
-  };
 
   // function to delete habbit from the habbit list
   const deleteHabbit = id => {
@@ -110,7 +127,7 @@ const HabbitsScreen = ({navigation, user}) => {
   return (
     <View style={styles.container}>
       <View style={styles.habbit}>
-        <Input
+        <TextInput
           placeholder="Add a Habbit"
           value={title}
           onChangeText={value => setTitle(value)}
@@ -124,7 +141,6 @@ const HabbitsScreen = ({navigation, user}) => {
           <TodoList
             key={habbit.key}
             habbit={habbit}
-            checkHabbit={checkHabbit}
             deleteHabbit={deleteHabbit}
           />
         ))}
@@ -172,9 +188,6 @@ const styles = StyleSheet.create({
       paddingLeft: 10,
       paddingRight: 10,
       borderBottomColor: "#666666"
-   },
-   card: {
-      width: "85%",
    },
    button: {
       alignItems: "center",
