@@ -1,39 +1,52 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  Text,
   TextInput,
+  Text,
   View,
   Button,
   ScrollView
 } from "react-native";
+import { Container, Header, Content, Card, CardItem,  Body } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 
 const TodoList = (props) => {
    return (
      <View style={styles.listTile}>
-       <Icon
-         name={props.todo.isChecked ? "check-circle" : "radio-button-unchecked"}
-         style={styles.leading}
-         size={20}
-         color="#666666"
-         onPress={() => props.checkTodo(props.todo.key)}
-       />
-       <Text style={styles.title}>{props.todo.name}</Text>
-       <Icon
-         name="delete"
-         style={styles.trailing}
-         size={20}
-         color="#666666"
-         onPress={() => props.deleteTodo(props.todo.key)}
-       />
+      {/* <Text style={styles.title}>{props.todo.name}</Text> */}
+      <Card style={styles.card}>
+         <CardItem header>
+            <Text>NativeBase{'     '}</Text>
+            <Icon
+               name={"edit"}
+               size={20}
+               color="#666666"
+               onPress={() => props.checkTodo(props.todo.key)}
+            />
+            {/* <Icon
+               name="delete"
+               size={20}
+               color="#666666"
+               onPress={() => props.deleteTodo(props.todo.key)}
+            /> */}
+         </CardItem>
+         <CardItem>
+            <Body>
+               <Text >
+               {props.todo.name}
+               </Text>
+            </Body>
+         </CardItem>
+      </Card>
+      
      </View>
    );
  }
 
 
-const HabbitsScreen = () => {
+const HabbitsScreen = ({navigation, user}) => {
+
   const [title, setTitle] = useState("");
 
   // iniitalize empty object todo
@@ -82,19 +95,17 @@ const HabbitsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.statusBar}></View>
-      {/* <AppBar /> */}
       <View style={styles.todo}>
         <TextInput
-          placeholder="Add a todo"
+          placeholder="Add a Habbit"
           value={title}
           onChangeText={value => setTitle(value)}
           style={styles.textbox}
         />
-        <Button title="Add" color="#7F39FB" onPress={() => addTodo()} />
+        <Button title="Add" color="#4050b5" onPress={() => addTodo()} />
       </View>
 
-      <ScrollView>
+      <ScrollView >
         {todos.map(todo => (
           <TodoList
             key={todo.key}
@@ -110,7 +121,7 @@ const HabbitsScreen = () => {
 
 const styles = StyleSheet.create({
    statusBar: {
-      backgroundColor: "#7F39FB",
+      backgroundColor: "#4050b5",
       color: "#fff",
       width: "100%",
       height: 30
@@ -129,7 +140,7 @@ const styles = StyleSheet.create({
    },
    textbox: {
       borderWidth: 1,
-      borderColor: "#7F39FB",
+      borderColor: "#4050b5",
       borderRadius: 8,
       padding: 10,
       margin: 10,
@@ -142,20 +153,13 @@ const styles = StyleSheet.create({
       justifyContent: "space-around",
       alignItems: "center",
       backgroundColor: "white",
-      padding: 10,
-      borderBottomWidth: 0.5,
+      paddingLeft: 10,
+      paddingRight: 10,
       borderBottomColor: "#666666"
    },
-   leading: {
-      width: "20%"
+   card: {
+      width: "100%",
    },
-   title: {
-      width: "60%",
-      fontSize: 18
-   },
-   trailing: {
-      width: "20%"
-   }
 });
 
 export default HabbitsScreen;
