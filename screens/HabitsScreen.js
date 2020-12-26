@@ -8,7 +8,8 @@ import {
   Button,
   TextInput,
   ScrollView,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from "react-native";
 import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
@@ -21,20 +22,34 @@ const TodoList = (props) => {
    const [habit, setHabit] = useState(props.habit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
-      props.editHabit(props.habit.key, habit.name);
+      props.editHabit(props.habit.id, habit.name);
    }
    return (
      <View style={styles.listTile}>
       {/* <Text style={styles.title}>{props.habit.name}</Text> */}
-      {isEditing?<></>:
+      {isEditing?
          <Icon
             name="delete"
             size={20}
             color="red"
-            onPress={() => props.deleteHabit(props.habit.key)}
+            // onPress={() => props.deleteHabit(props.habit.id)}
+            onPress={() => Alert.alert(
+               "Delete",
+               "Are you sure you want to delete?",
+               [
+                 {
+                   text: "Cancel",
+                   style: "cancel"
+                 },
+                 { text: "OK", onPress: () => props.deleteHabit(props.habit.id) }
+               ],
+               { cancelable: true }
+             )}
          />
+      :  
+         <></>
       }
-      <Card style={isEditing?{width: "85%"}:{width: "70%"}}>
+      <Card style={isEditing?{width: "72%"}:{width: "85%"}}>
          <CardItem>
             <Body>
             {isEditing?
@@ -47,9 +62,9 @@ const TodoList = (props) => {
                <TextInput
                defaultValue={String(props.habit.name)}
                autoFocus={true}
-               // onEndEditing={()=>{
-               //    editClicked()
-               // }}
+               onEndEditing={()=>{
+                  editClicked()
+               }}
                onChangeText={value => setHabit({...habit, name: value})}
                />
             </>
@@ -66,7 +81,7 @@ const TodoList = (props) => {
             name={"edit"}
             size={20}
             color="#666666"
-            // onPress={() => props.checkHabit(props.habit.key)}
+            // onPress={() => props.checkHabit(props.habit.id)}
             />
       </TouchableOpacity>
       :
@@ -93,68 +108,91 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
 
   const [title, setTitle] = useState("");
 
-  // iniitalize empty object habit
-  const [habit, setTodo] = useState({});
 
   // Initalize empty array to store habits
   const [habits, setHabits] = useState([]);
 
   // function to add habit object in habit list
-  const addHabit = () => {
-    if (title.length > 0) {
-      // Add habit to the list
-      setHabits([...habits, { key: Date.now(), name: title}]);
-      // clear the value of the textfield
-      setTitle("");
-    }
-    console.log(habits)
+  const addHabit = async () => {
+      if (title.length > 0) {
+         // Add habit to the list
+         let sendToFirestoreHabits = {}
+         let habitMessage=title;
+         // for (let habit in habits){
+         //    console.log('habit', habits[habit])
+         //    sendToFirestoreHabits[habits[habit].id]=habits[habit].name;
+         // }
+         // await setHabits([...habits, { id: Date.now(), name: title}]);
+         // clear the value of the textfield
+         await db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[Date.now()]:habitMessage})
+         .catch((error) => {
+            console.error("Error adding document: ", error);
+         });
+         setTitle("");
+      }
+      let temp = {}
+      for (let habit in habits){
+         console.log('habit', habits[habit])
+         temp[habits[habit].id]=habits[habit].name;
+      }
+
   };
 
   const editHabit = (id, title) => {
-      setHabits([...habits.filter((habit)=>habit.key!==id), { key: id, name: title}])
-      console.log(id, title)
+      setSortHabbits([...habits.filter((habit)=>habit.id!==id), { id: id, name: title}]);
+      // console.log(id, title)
   }
 
 
   // function to delete habit from the habit list
   const deleteHabit = id => {
-    // loop through habit list and return habits that don't match the id
-    // update the state using setHabits function
-    setHabits(habits.filter(habit => {
-      return habit.key !== id;
-    }));
+      // loop through habit list and return habits that don't match the id
+      // update the state using setHabits function
+      setSortHabbits(habits.filter(habit => {
+         return habit.id !== id;
+      }));
   };
 
+  const setSortHabbits = (inputHabbits) => {
+      // var temp = habits.slice(0);
+      setHabits([...inputHabbits.sort((a,b) => {
+         var x = a.id.toLowerCase();
+         var y = b.id.toLowerCase();
+         return x < y ? -1 : x > y ? 1 : 0;
+      })])
+  }
+
   useEffect(() => {
-    let unsubscribe = () => {};
-    try {
-       unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
-          let data = await querySnapshot.data()
-          let firebaseHabits = []
-          if (data) {
-            for (const key in data) {
-               const name = data[key];
-               // console.log('here', key, name)
-               firebaseHabits.push({key, name})
-            }
-          habits.map((habit) => {
-            firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.key!==habit.key)
-          })
-          setHabits([...habits, ...firebaseHabits])
-          }
-       })
-    } catch (error) {
-       console.log('Firestore error', error);
-    }
+      let unsubscribe = () => {};
+      try {
+         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
+            let data = await querySnapshot.data()
+            let firebaseHabits = []
+            //  console.log('data', data)
+            if (data) {
+               for (const id in data) {
+                  const name = data[id];
+                  // console.log('here', id, name)
+                  firebaseHabits.push({id, name})
+               }         
+            habits.map((habit) => {
+               firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
+            })
+            setSortHabbits([...habits, ...firebaseHabits]);
+         }
+         })
+      } catch (error) {
+         console.log('Firestore error', error);
+      }
 
 
-    const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
-       submit();
-    })
-    return () => {
-       unsubscribe();
-       navUnsubscribe();
-    }
+      const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
+         submit();
+      })
+      return () => {
+         unsubscribe();
+         navUnsubscribe();
+      }
  }, []);
 
   return (
@@ -172,7 +210,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
       <ScrollView >
         {habits.map(habit => (
           <TodoList
-            key={habit.key}
+            key={habit.id}
             habit={habit}
             editHabit={editHabit}
             deleteHabit={deleteHabit}
