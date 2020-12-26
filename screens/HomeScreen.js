@@ -27,7 +27,7 @@ const HomeScreen = (props) => {
     if(user){
       setUser(user);
       await auth().currentUser.reload();
-      console.log(user)
+      // console.log(user)
     }
     if (initializing) setInitializing(false);
   }

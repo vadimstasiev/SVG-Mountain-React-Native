@@ -107,6 +107,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
       // clear the value of the textfield
       setTitle("");
     }
+    console.log(habits)
   };
 
   const editHabit = (id, title) => {
@@ -128,18 +129,19 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
     let unsubscribe = () => {};
     try {
        unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
-          // let data = await querySnapshot.data()
-          // // console.log('querySnapshot.data()', querySnapshot.data())
-          // if (data){
-          //    setFirestoreInput(data.message);
-          //    setInput(firestoreInput)
-          //    setFirestoreMood(data.mood)
-          //    console.log(mood)
-          //    if(mood === defaultMood){
-          //       setMood(data.mood);
-                
-          //    }
-          // }
+          let data = await querySnapshot.data()
+          let firebaseHabits = []
+          if (data) {
+            for (const key in data) {
+               const name = data[key];
+               // console.log('here', key, name)
+               firebaseHabits.push({key, name})
+            }
+          habits.map((habit) => {
+            firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.key!==habit.key)
+          })
+          setHabits([...habits, ...firebaseHabits])
+          }
        })
     } catch (error) {
        console.log('Firestore error', error);
@@ -153,7 +155,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
        unsubscribe();
        navUnsubscribe();
     }
- }, [habits]);
+ }, []);
 
   return (
     <View style={styles.container}>
