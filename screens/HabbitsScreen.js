@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
-  TextInput,
   Text,
   View,
   Button,
   ScrollView
 } from "react-native";
-import { Container, Header, Content, Card, CardItem,  Body } from 'native-base';
+import { Container, Header, Content, Card, CardItem,  Body, Input } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 
@@ -16,29 +15,29 @@ const TodoList = (props) => {
      <View style={styles.listTile}>
       {/* <Text style={styles.title}>{props.todo.name}</Text> */}
       <Card style={styles.card}>
-         <CardItem header>
-            <Text>NativeBase{'     '}</Text>
+         {/* <CardItem header>
+            <Icon
+               name="delete"
+               size={20}
+               color="#666666"
+               onPress={() => props.deleteTodo(props.todo.key)}
+            />
+         </CardItem> */}
+         <CardItem>
+            <Body>
+               <Text >
+               {props.todo.name}
+               {'     '}
+               </Text>
+            </Body>
+         </CardItem>
+      </Card>
             <Icon
                name={"edit"}
                size={20}
                color="#666666"
                onPress={() => props.checkTodo(props.todo.key)}
             />
-            {/* <Icon
-               name="delete"
-               size={20}
-               color="#666666"
-               onPress={() => props.deleteTodo(props.todo.key)}
-            /> */}
-         </CardItem>
-         <CardItem>
-            <Body>
-               <Text >
-               {props.todo.name}
-               </Text>
-            </Body>
-         </CardItem>
-      </Card>
       
      </View>
    );
@@ -96,7 +95,7 @@ const HabbitsScreen = ({navigation, user}) => {
   return (
     <View style={styles.container}>
       <View style={styles.todo}>
-        <TextInput
+        <Input
           placeholder="Add a Habbit"
           value={title}
           onChangeText={value => setTitle(value)}
@@ -144,7 +143,9 @@ const styles = StyleSheet.create({
       borderRadius: 8,
       padding: 10,
       margin: 10,
-      width: "80%"
+      width: "80%", 
+      fontSize:16,
+      height: 39
    },
    listTile: {
       width: "100%",
@@ -158,7 +159,7 @@ const styles = StyleSheet.create({
       borderBottomColor: "#666666"
    },
    card: {
-      width: "100%",
+      width: "90%",
    },
 });
 
