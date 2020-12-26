@@ -61,9 +61,9 @@ const Notes = ({route, navigation}) => {
 
    useEffect(() => {
       navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
-      let unsubscribe = () => {};
+      let unsubscribeDay = () => {};
       try {
-         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
+         unsubscribeDay = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
             let data = await querySnapshot.data()
             if (data){
                setFirestoreInput(data.message);
@@ -80,11 +80,39 @@ const Notes = ({route, navigation}) => {
          console.log('Firestore error', error);
       }
 
+      let unsubscribeHabbits = () => {};
+      try {
+         unsubscribeHabbits = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
+            let data = await querySnapshot.data()
+            let firebaseHabits = []
+             console.log('data', data)
+            if (data) {
+               for (const id in data) {
+                  const name = data[id];
+                  // console.log('here', id, name)
+                  firebaseHabits.push({id, name})
+               }
+            // habits.map((habit) => {
+            //    firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
+            // })
+            let localHabbits;
+            firebaseHabits.map((habit) => {
+               localHabbits = habits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
+            })
+            console.log(firebaseHabits)
+            setSortHabbits([...habits, ...firebaseHabits]);
+         }
+         })
+      } catch (error) {
+         console.log('Firestore error', error);
+      }
+
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
          submit();
       })
       return () => {
-         unsubscribe();
+         unsubscribeDay();
+         unsubscribeHabbits();
          navUnsubscribe();
       }
    }, [firestoreInput, firestoreMood]);

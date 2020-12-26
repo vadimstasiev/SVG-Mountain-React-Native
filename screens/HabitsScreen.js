@@ -23,7 +23,7 @@ const TodoList = (props) => {
    const [habit, setHabit] = useState(props.habit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
-      console.log('update', props.habit.id, habit.name)
+      // console.log('update', props.habit.id, habit.name)
       props.editHabit(props.habit.id, habit.name);
    }
    return (
