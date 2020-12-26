@@ -7,17 +7,20 @@ import firestore from "@react-native-firebase/firestore";
 
 import InitialLogoScreen from './InitialLogoScreen';
 import MountainScreen from './MountainScreen';
-import HabbitsScreen from './HabbitsScreen';
+import HabitsScreen from './HabitsScreen';
 
 let db = firestore();
 
 const HomeScreen = (props) => {
+
+  const monthSvgScreen = 'January21';
   
   const {navigation} = props;
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
   const [screen, setScreen] = useState('Mood');
+
 
   // Handle user state changes
   const onAuthStateChanged = async user => {
@@ -52,10 +55,10 @@ const HomeScreen = (props) => {
           <>
           <Content >
           {screen==='Mood'?
-            <MountainScreen user={user} {...props}/>
+            <MountainScreen monthSvgScreen={monthSvgScreen} user={user} {...props}/>
             :<></>}
-          {screen==='Habbits'?
-            <HabbitsScreen user={user} {...props}/>
+          {screen==='Habits'?
+            <HabitsScreen monthSvgScreen={monthSvgScreen} user={user} {...props}/>
           :<></>}
           </Content>
           <Footer>
@@ -63,8 +66,8 @@ const HomeScreen = (props) => {
               <Button active={screen==='Mood'} onPress={(e)=>setScreen('Mood')}>
                 <Text>Mood</Text>
               </Button>
-              <Button active={screen==='Habbits'} onPress={(e)=>setScreen('Habbits')}>
-                <Text>Habbits</Text>
+              <Button active={screen==='Habits'} onPress={(e)=>setScreen('Habits')}>
+                <Text>Habits</Text>
               </Button>
               <Button onPress={signOut}>
                 <Text>Sign Out</Text>

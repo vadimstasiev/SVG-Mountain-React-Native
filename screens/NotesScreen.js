@@ -65,7 +65,6 @@ const Notes = ({route, navigation}) => {
       try {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
             let data = await querySnapshot.data()
-            // console.log('querySnapshot.data()', querySnapshot.data())
             if (data){
                setFirestoreInput(data.message);
                setInput(firestoreInput)
@@ -81,9 +80,6 @@ const Notes = ({route, navigation}) => {
          console.log('Firestore error', error);
       }
 
-      // markComplete(13, '#9B59B6');
-      // markComplete(31, '#9B59B6');
-      // console.log('helloasasda', snapshotData);
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
          submit();
       })

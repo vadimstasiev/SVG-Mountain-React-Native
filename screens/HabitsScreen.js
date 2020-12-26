@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
+import firestore from "@react-native-firebase/firestore";
+
 import {
   StyleSheet,
   Text,
@@ -12,23 +14,24 @@ import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base'
 import Icon from "react-native-vector-icons/MaterialIcons";
 
 
+let db = firestore();
+
 const TodoList = (props) => {
-   const inputReference = useRef();
    const [isEditing, setIsEditing] = useState('false');
-   const [habbit, setHabbit] = useState(props.habbit)
+   const [habit, setHabit] = useState(props.habit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
-      props.editHabbit(props.habbit.key, habbit.name);
+      props.editHabit(props.habit.key, habit.name);
    }
    return (
      <View style={styles.listTile}>
-      {/* <Text style={styles.title}>{props.habbit.name}</Text> */}
+      {/* <Text style={styles.title}>{props.habit.name}</Text> */}
       {isEditing?<></>:
          <Icon
             name="delete"
             size={20}
             color="red"
-            onPress={() => props.deleteHabbit(props.habbit.key)}
+            onPress={() => props.deleteHabit(props.habit.key)}
          />
       }
       <Card style={isEditing?{width: "85%"}:{width: "70%"}}>
@@ -36,20 +39,19 @@ const TodoList = (props) => {
             <Body>
             {isEditing?
                <Text >
-               {props.habbit.name}
+               {props.habit.name}
                {'     '}
                </Text>
             :
             <>
                <TextInput
-               defaultValue={String(props.habbit.name)}
+               defaultValue={String(props.habit.name)}
                autoFocus={true}
                // onEndEditing={()=>{
                //    editClicked()
                // }}
-               onChangeText={value => setHabbit({...habbit, name: value})}
+               onChangeText={value => setHabit({...habit, name: value})}
                />
-               {/* {console.log(inputReference)} */}
             </>
             }
             </Body>
@@ -64,7 +66,7 @@ const TodoList = (props) => {
             name={"edit"}
             size={20}
             color="#666666"
-            // onPress={() => props.checkHabbit(props.habbit.key)}
+            // onPress={() => props.checkHabit(props.habit.key)}
             />
       </TouchableOpacity>
       :
@@ -87,65 +89,91 @@ const TodoList = (props) => {
  }
 
 
-const HabbitsScreen = ({navigation, user}) => {
+const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
 
   const [title, setTitle] = useState("");
 
-  // iniitalize empty object habbit
-  const [habbit, setTodo] = useState({});
+  // iniitalize empty object habit
+  const [habit, setTodo] = useState({});
 
-  // Initalize empty array to store habbits
-  const [habbits, setHabbits] = useState([]);
+  // Initalize empty array to store habits
+  const [habits, setHabits] = useState([]);
 
-  // function to add habbit object in habbit list
-  const addHabbit = () => {
+  // function to add habit object in habit list
+  const addHabit = () => {
     if (title.length > 0) {
-      // Add habbit to the list
-      setHabbits([...habbits, { key: Date.now(), name: title}]);
+      // Add habit to the list
+      setHabits([...habits, { key: Date.now(), name: title}]);
       // clear the value of the textfield
       setTitle("");
     }
   };
 
-  const editHabbit = (id, title) => {
-      setHabbits([...habbits.filter((habbit)=>habbit.key!==id), { key: id, name: title}])
+  const editHabit = (id, title) => {
+      setHabits([...habits.filter((habit)=>habit.key!==id), { key: id, name: title}])
       console.log(id, title)
   }
 
 
-  // function to delete habbit from the habbit list
-  const deleteHabbit = id => {
-    // loop through habbit list and return habbits that don't match the id
-    // update the state using setHabbits function
-    setHabbits(habbits.filter(habbit => {
-      return habbit.key !== id;
+  // function to delete habit from the habit list
+  const deleteHabit = id => {
+    // loop through habit list and return habits that don't match the id
+    // update the state using setHabits function
+    setHabits(habits.filter(habit => {
+      return habit.key !== id;
     }));
   };
 
   useEffect(() => {
-    console.log(habbits.length, "TodoList length");
-    //console.log(habbits);
-  }, [habbits]);
+    let unsubscribe = () => {};
+    try {
+       unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
+          // let data = await querySnapshot.data()
+          // // console.log('querySnapshot.data()', querySnapshot.data())
+          // if (data){
+          //    setFirestoreInput(data.message);
+          //    setInput(firestoreInput)
+          //    setFirestoreMood(data.mood)
+          //    console.log(mood)
+          //    if(mood === defaultMood){
+          //       setMood(data.mood);
+                
+          //    }
+          // }
+       })
+    } catch (error) {
+       console.log('Firestore error', error);
+    }
+
+
+    const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
+       submit();
+    })
+    return () => {
+       unsubscribe();
+       navUnsubscribe();
+    }
+ }, [habits]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.habbit}>
+      <View style={styles.habit}>
         <TextInput
-          placeholder="Add a Habbit"
+          placeholder="Add a Habit"
           value={title}
           onChangeText={value => setTitle(value)}
           style={styles.textbox}
         />
-        <Button title="Add" color="#4050b5" onPress={() => addHabbit()} />
+        <Button title="Add" color="#4050b5" onPress={() => addHabit()} />
       </View>
 
       <ScrollView >
-        {habbits.map(habbit => (
+        {habits.map(habit => (
           <TodoList
-            key={habbit.key}
-            habbit={habbit}
-            editHabbit={editHabbit}
-            deleteHabbit={deleteHabbit}
+            key={habit.key}
+            habit={habit}
+            editHabit={editHabit}
+            deleteHabit={deleteHabit}
           />
         ))}
       </ScrollView>
@@ -166,7 +194,7 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "flex-start"
    },
-   habbit: {
+   habit: {
       flexDirection: "row",
       width: "100%",
       justifyContent: "center",
@@ -200,4 +228,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HabbitsScreen;
+export default HabitsScreen;

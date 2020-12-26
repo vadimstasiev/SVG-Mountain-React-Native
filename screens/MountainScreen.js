@@ -35,23 +35,23 @@ import Svg, {
 let db = firestore();
 
 
-const Mountain = ({navigation, route, user}) => {
+const Mountain = ({navigation, route, user, monthSvgScreen}) => {
   // TODOS
   // check how many days the month has
   // render the day based on the number of months (remove polygons if necessary)
   // create the mood - color array
 
    // const { user } = route.params;
-   const monthSvgScreen = 'January21';
+   // const monthSvgScreen = 'January21';
    const defaultColor = "#fff";
    const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
    let defaultMood = 'None';
    const moods = {
-      '#C0392B':'Perfect',
-      '#E74C3C':'Good',
+      '#2980B9':'Perfect',
+      '#8E44AD':'Good',
       '#9B59B6':'Average',
-      '#8E44AD':'Bad',
-      '#2980B9':'Fucking Terrible'
+      '#E74C3C':'Bad',
+      '#C0392B':'Terrible'
    }
 
 
