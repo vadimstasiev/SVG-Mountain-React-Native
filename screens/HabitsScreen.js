@@ -13,6 +13,7 @@ import {
 } from "react-native";
 import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
+import { firebase } from "@react-native-firebase/auth";
 
 
 let db = firestore();
@@ -154,9 +155,13 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
   const deleteHabit = id => {
       // loop through habit list and return habits that don't match the id
       // update the state using setHabits function
-      setSortHabbits(habits.filter(habit => {
-         return habit.id !== id;
-      }));
+      // setSortHabbits(habits.filter(habit => {
+      //    return habit.id !== id;
+      // }));
+      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[id]:firebase.firestore.FieldValue.delete()})
+      .catch((error) => {
+         console.error("Error adding document: ", error);
+      });
   };
 
   const setSortHabbits = (inputHabbits) => {
