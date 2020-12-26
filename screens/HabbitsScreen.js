@@ -42,7 +42,7 @@ const TodoList = (props) => {
             :
             <>
                <TextInput
-               defaultValue={props.habbit.name}
+               defaultValue={String(props.habbit.name)}
                autoFocus={true}
                // onEndEditing={()=>{
                //    editClicked()
