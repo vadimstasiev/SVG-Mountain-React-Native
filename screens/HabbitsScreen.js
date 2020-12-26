@@ -18,20 +18,20 @@ const TodoList = (props) => {
    }
    return (
      <View style={styles.listTile}>
-      {/* <Text style={styles.title}>{props.todo.name}</Text> */}
+      {/* <Text style={styles.title}>{props.habbit.name}</Text> */}
       <Card style={styles.card}>
          {/* <CardItem header>
             <Icon
                name="delete"
                size={20}
                color="#666666"
-               onPress={() => props.deleteTodo(props.todo.key)}
+               onPress={() => props.deleteHabbit(props.habbit.key)}
             />
          </CardItem> */}
          <CardItem>
             <Body>
                <Text >
-               {props.todo.name}
+               {props.habbit.name}
                {'     '}
                </Text>
             </Body>
@@ -45,7 +45,7 @@ const TodoList = (props) => {
             name={"edit"}
             size={20}
             color="#666666"
-            // onPress={() => props.checkTodo(props.todo.key)}
+            // onPress={() => props.checkHabbit(props.habbit.key)}
             />
       </TouchableOpacity>
       
@@ -58,69 +58,74 @@ const HabbitsScreen = ({navigation, user}) => {
 
   const [title, setTitle] = useState("");
 
-  // iniitalize empty object todo
-  const [todo, setTodo] = useState({});
+  // iniitalize empty object habbit
+  const [habbit, setTodo] = useState({});
 
-  // Initalize empty array to store todos
-  const [todos, setTodos] = useState([]);
+  // Initalize empty array to store habbits
+  const [habbits, setHabbits] = useState([]);
 
-  // function to add todo object in todo list
-  const addTodo = () => {
+  // function to add habbit object in habbit list
+  const addHabbit = () => {
     if (title.length > 0) {
-      // Add todo to the list
-      setTodos([...todos, { key: Date.now(), name: title, isChecked: false }]);
+      // Add habbit to the list
+      setHabbits([...habbits, { key: Date.now(), name: title, isChecked: false }]);
       // clear the value of the textfield
       setTitle("");
     }
+    console.log(habbits)
   };
 
-  // function to mark todo as checked or unchecked
-  const checkTodo = id => {
-    // loop through todo list and look for the the todo that matches the given id param
-    // update the state using setTodos function
-    setTodos(
-      todos.map(todo => {
-        if (todo.key === id) {
-          todo.isChecked = !todo.isChecked;
+  const editHabbits = (key, message) => {
+
+  }
+
+  // function to mark habbit as checked or unchecked
+  const checkHabbit = id => {
+    // loop through habbit list and look for the the habbit that matches the given id param
+    // update the state using setHabbits function
+    setHabbits(
+      habbits.map(habbit => {
+        if (habbit.key === id) {
+          habbit.isChecked = !habbit.isChecked;
         }
-        return todo;
+        return habbit;
       })
     );
   };
 
-  // function to delete todo from the todo list
-  const deleteTodo = id => {
-    // loop through todo list and return todos that don't match the id
-    // update the state using setTodos function
-    setTodos(todos.filter(todo => {
-      return todo.key !== id;
+  // function to delete habbit from the habbit list
+  const deleteHabbit = id => {
+    // loop through habbit list and return habbits that don't match the id
+    // update the state using setHabbits function
+    setHabbits(habbits.filter(habbit => {
+      return habbit.key !== id;
     }));
   };
 
   useEffect(() => {
-    console.log(todos.length, "TodoList length");
-    //console.log(todos);
-  }, [todos]);
+    console.log(habbits.length, "TodoList length");
+    //console.log(habbits);
+  }, [habbits]);
 
   return (
     <View style={styles.container}>
-      <View style={styles.todo}>
+      <View style={styles.habbit}>
         <Input
           placeholder="Add a Habbit"
           value={title}
           onChangeText={value => setTitle(value)}
           style={styles.textbox}
         />
-        <Button title="Add" color="#4050b5" onPress={() => addTodo()} />
+        <Button title="Add" color="#4050b5" onPress={() => addHabbit()} />
       </View>
 
       <ScrollView >
-        {todos.map(todo => (
+        {habbits.map(habbit => (
           <TodoList
-            key={todo.key}
-            todo={todo}
-            checkTodo={checkTodo}
-            deleteTodo={deleteTodo}
+            key={habbit.key}
+            habbit={habbit}
+            checkHabbit={checkHabbit}
+            deleteHabbit={deleteHabbit}
           />
         ))}
       </ScrollView>
@@ -141,7 +146,7 @@ const styles = StyleSheet.create({
       alignItems: "center",
       justifyContent: "flex-start"
    },
-   todo: {
+   habbit: {
       flexDirection: "row",
       width: "100%",
       justifyContent: "center",
