@@ -18,7 +18,7 @@ const TodoList = (props) => {
    const [habbit, setHabbit] = useState(props.habbit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
-      props.editHabbit(props.habbit.key, habbit);
+      props.editHabbit(props.habbit.key, habbit.name);
    }
    return (
      <View style={styles.listTile}>
@@ -47,7 +47,7 @@ const TodoList = (props) => {
                // onEndEditing={()=>{
                //    editClicked()
                // }}
-               onChangeText={value => setHabbit(value)}
+               onChangeText={value => setHabbit({...habbit, name: value})}
                />
                {/* {console.log(inputReference)} */}
             </>
