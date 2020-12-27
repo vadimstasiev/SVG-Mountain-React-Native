@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TextInput } from "react-native";
+import { View, StyleSheet, TextInput, Alert } from "react-native";
 import { Container, Header, Body, Text, Form, Textarea, Button, Item, Label, Input, Content, ListItem, CheckBox, Icon, Footer, FooterTab} from "native-base";
 import ColorPalette from 'react-native-color-palette';
 
@@ -95,6 +95,10 @@ const Notes = ({route, navigation}) => {
       .catch((error) => {
          console.error("Error adding document: ", error);
       });
+   }
+
+   const deleteDay = () =>{
+
    }
 
    useEffect(() => {
@@ -203,6 +207,24 @@ const Notes = ({route, navigation}) => {
             
          </Content>
       </Content>
+      <Footer>
+         <FooterTab>
+            <Button active={true} onPress={() => Alert.alert(
+               "Delete",
+               "Are you sure you want to delete?",
+               [
+                 {
+                   text: "Cancel",
+                   style: "cancel"
+                 },
+                 { text: "OK", onPress: deleteDay }
+               ],
+               { cancelable: true }
+             )}>
+               <Text>Delete Day</Text>
+            </Button>
+         </FooterTab>
+      </Footer>
    </Container>
 }
 

@@ -8,6 +8,7 @@ import firestore from "@react-native-firebase/firestore";
 import InitialLogoScreen from './InitialLogoScreen';
 import MountainScreen from './MountainScreen';
 import HabitsScreen from './HabitsScreen';
+import LoadingScreen from "./LoadingScreen";
 
 let db = firestore();
 
@@ -46,6 +47,8 @@ const HomeScreen = (props) => {
   }, [user, screen]);
   
   if (initializing) return <InitialLogoScreen/>; 
+  
+  // return <LoadingScreen backgroundColor={'blue'}/>; 
 
   
   return (

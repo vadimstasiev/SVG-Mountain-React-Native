@@ -495,7 +495,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
    return (
       <View style={styles.container}>
          <Svg  
-         viewBox="0 0 1023 1300" preserveAspectRatio={"none"}>
+         viewBox="0 -50 1023 1350" preserveAspectRatio={"none"}>
 
             {polygons.map((polygon) => <G key={polygon.id}>
                <Path
