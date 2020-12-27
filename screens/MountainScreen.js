@@ -469,7 +469,17 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                })
                setFirestoreSvgData(tempSvgData);
             })
-            
+            // setPolygons(polygons.map(polygon => {
+            //       return {
+            //          ...polygon,
+            //          fill: '#fff',
+            //          day: {
+            //             ...polygon.day,
+            //             fill: "black"
+            //          }
+            //       }
+            // }))
+
             setPolygons(polygons.map(polygon => {
                let firestorePolygon = firestoreSvgData[polygon.id]
                if(firestorePolygon && firestorePolygon.mood !== 'None'){
