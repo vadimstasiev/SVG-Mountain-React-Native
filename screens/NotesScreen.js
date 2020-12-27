@@ -121,7 +121,6 @@ const Notes = ({route, navigation}) => {
       setInitializing(true);
       try {
          unsubscribeDay = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
-            await setInitializing(true);
             let data = await querySnapshot.data()
             if (data){
                setFirestoreInput(data.message);
@@ -133,17 +132,15 @@ const Notes = ({route, navigation}) => {
                }
                setHabitsChecked(data.habitsChecked || [])
             }
-            setInitializing(false);
+            // await setInitializing(false);
          })
       } catch (error) {
          console.log('Firestore error', error);
-         setInitializing(false);
       }
 
       let unsubscribeHabbits = () => {};
       try {
          unsubscribeHabbits = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
-            await setInitializing(true);
             let data = await querySnapshot.data();
             let firebaseHabits = [];
             if (data) {
@@ -152,12 +149,12 @@ const Notes = ({route, navigation}) => {
                   firebaseHabits.push({id, name});
                }
             setSortHabbits(firebaseHabits);
-            setInitializing(false);
+            // setInitializing(false);
          }
          })
       } catch (error) {
          console.log('Firestore error', error);
-         setInitializing(false);
+         // setInitializing(false);
       }
 
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {

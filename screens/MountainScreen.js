@@ -464,7 +464,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       setInitializing(true);
       try {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(async querySnapshot=>{
-            await setInitializing(true);
+            // await setInitializing(true);
             let tempSvgData = {};
             querySnapshot.forEach(doc =>{
                tempSvgData[doc.id]=doc.data()
@@ -483,7 +483,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                }
                return polygon;
             }))
-            await setInitializing(false);
+            // await setInitializing(false);
          })
          // setPolygons(polygons.map(polygon => {
          //       return {
@@ -501,6 +501,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       } catch (error) {
          console.log('Firestore error', error);
       }
+      setInitializing(false);
       return () => {
          unsubscribe()
       }

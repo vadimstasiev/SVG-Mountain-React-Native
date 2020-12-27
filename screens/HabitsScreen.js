@@ -133,7 +133,9 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
          await db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[Date.now()]:habitMessage})
          .catch((error) => {
             db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').set({[Date.now()]:habitMessage})
-            console.error("Error adding document: ", error);
+            .catch((error) => {
+               console.error("Error adding document: ", error);
+            });
          });
          setTitle("");
       }
@@ -182,7 +184,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
       setInitializing(true);
       try {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
-            await setInitializing(true);
+            // await setInitializing(true);
             let data = await querySnapshot.data()
             let firebaseHabits = []
              console.log('data', data)
@@ -201,13 +203,14 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
             })
             console.log(firebaseHabits)
             setSortHabbits([...habits, ...firebaseHabits]);
-            await setInitializing(false);
+            // await setInitializing(false);
          }
          })
       } catch (error) {
          console.log('Firestore error', error);
       }
 
+      setInitializing(false);
 
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
          submit();
