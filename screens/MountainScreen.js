@@ -36,19 +36,6 @@ let db = firestore();
 
 
 const Mountain = ({navigation, route, user, monthSvgScreen}) => {
-   const defaultColor = "#fff";
-   const colorOptions = ['#3a402a', '#688052', '#6aab6a', '#d9b358', '#fff2a7'];
-   let defaultMood = 'None';
-   const moods = {
-      '#fff2a7':'Awesome',
-      '#d9b358':'Good',
-      '#6aab6a':'Fine',
-      '#688052':'Bad',
-      '#3a402a':'Terrible'
-   }
-
-
-   const [firestoreSvgData, setFirestoreSvgData] = useState({});
    const [polygons, setPolygons] = useState(
    [
       {
@@ -454,6 +441,18 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
    ]
   )
 
+   const defaultColor = "white";
+   const colorOptions = ['#3a402a', '#688052', '#6aab6a', '#d9b358', '#fff2a7'];
+   let defaultMood = 'None';
+   const moods = {
+      '#fff2a7':'Awesome',
+      '#d9b358':'Good',
+      '#6aab6a':'Fine',
+      '#688052':'Bad',
+      '#3a402a':'Terrible'
+   }
+
+
    const clickPolygon = (polygon) =>{
       navigation.navigate('Notes', {user, dayNum: polygon.id, monthSvgScreen, moods, defaultMood, colorOptions})
    }
@@ -461,28 +460,14 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
    useEffect(() => {
       let unsubscribe = () => {};
       try {
-
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
             let tempSvgData = {};
             querySnapshot.forEach(doc =>{
-                  tempSvgData[doc.id]=doc.data()
-               })
-               setFirestoreSvgData(tempSvgData);
+               tempSvgData[doc.id]=doc.data()
             })
-            // setPolygons(polygons.map(polygon => {
-            //       return {
-            //          ...polygon,
-            //          fill: '#fff',
-            //          day: {
-            //             ...polygon.day,
-            //             fill: "black"
-            //          }
-            //       }
-            // }))
-
             setPolygons(polygons.map(polygon => {
-               let firestorePolygon = firestoreSvgData[polygon.id]
-               if(firestorePolygon && firestorePolygon.mood !== 'None'){
+               let firestorePolygon = tempSvgData[polygon.id]
+               if(firestorePolygon) {
                   return {
                      ...polygon,
                      fill: Object.keys(moods).find(key => moods[key] === firestorePolygon.mood),
@@ -494,13 +479,28 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                }
                return polygon;
             }))
-         } catch (error) {
-            console.log('Firestore error', error);
-         }
-         return () => {
-            unsubscribe()
-         }
-   }, [firestoreSvgData])
+         })
+         // setPolygons(polygons.map(polygon => {
+         //       return {
+         //          ...polygon,
+         //          fill: '#fff',
+         //          day: {
+         //             ...polygon.day,
+         //             fill: "black"
+         //          }
+         //       }
+         // }))
+
+
+         
+      } catch (error) {
+         console.log('Firestore error', error);
+      }
+      console.log('hello')
+      return () => {
+         unsubscribe()
+      }
+   }, [])
 
    return (
       <View style={styles.container}>
@@ -510,14 +510,15 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
             {polygons.map((polygon) => <G key={polygon.id}>
                <Path
                {...polygon}
-               defaultColor={"#fff"}
+               defaultColor={defaultColor}
                onPressIn={() => clickPolygon(polygon)}
                />
                { polygon.day?
                <SvgText
                x={polygon.day.x}
                y={polygon.day.y}
-               fill={polygon.fill==='#fff2a7'?'black':polygon.day.fill}
+               // fill={polygon.fill==='#fff2a7'?'black':polygon.fill===defaultColor?'black':'white'}
+               fill={'black'}
                fontSize="50"
                fontWeight="bold"
                textAnchor="middle">

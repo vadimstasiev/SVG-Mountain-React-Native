@@ -5,7 +5,7 @@ import ColorPalette from 'react-native-color-palette';
 
 import auth, { firebase } from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
-import { NavigationAction } from '@react-navigation/native';
+// import { NavigationActions, StackActions } from 'react-navigation';
 
 
 import Svg, {
@@ -99,16 +99,16 @@ const Notes = ({route, navigation}) => {
    }
 
    const deleteDay = () =>{
-      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).delete()
+      db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).update({
+         message:firebase.firestore.FieldValue.delete(),
+         mood: firebase.firestore.FieldValue.delete(), 
+         habitsChecked: firebase.firestore.FieldValue.delete()
+      })
       .catch((error) => {
          console.error("Error adding document: ", error);
       });
-      // navigation.goBack();
-      // NavigationAction.resetAction()
-      // const resetAction = NavigationAction.reset({
-      //    index: 0,
-      //    actions: [NavigationAction.navigate({ routeName: 'Home' })],
-      // });
+      navigation.goBack();
+
    }
 
    useEffect(() => {
