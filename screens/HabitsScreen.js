@@ -13,6 +13,8 @@ import {
 } from "react-native";
 import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
+import LoadingScreen from "./LoadingScreen";
+
 import { firebase } from "@react-native-firebase/auth";
 
 
@@ -114,6 +116,8 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
   // Initalize empty array to store habits
   const [habits, setHabits] = useState([]);
 
+  const [initializing, setInitializing] = useState(true)
+
   // function to add habit object in habit list
   const addHabit = async () => {
       if (title.length > 0) {
@@ -175,8 +179,10 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
 
   useEffect(() => {
       let unsubscribe = () => {};
+      setInitializing(true);
       try {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
+            await setInitializing(true);
             let data = await querySnapshot.data()
             let firebaseHabits = []
              console.log('data', data)
@@ -195,6 +201,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
             })
             console.log(firebaseHabits)
             setSortHabbits([...habits, ...firebaseHabits]);
+            await setInitializing(false);
          }
          })
       } catch (error) {
@@ -210,6 +217,10 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
          navUnsubscribe();
       }
  }, []);
+
+   if (initializing) return <View style={styles.loadingContainer}>
+      <LoadingScreen backgroundColor={'white'} color={'#6aab6a'}/>
+   </View>
 
   return (
     <View style={styles.container}>
@@ -243,6 +254,15 @@ const styles = StyleSheet.create({
       color: "#fff",
       width: "100%",
       height: 30
+   },
+   loadingContainer: {
+      flex: 1,
+      margin:0,
+      justifyContent: 'center',
+      paddingTop: 10,
+      backgroundColor: 'white',
+      padding: 8,
+      height:700
    },
    container: {
       flex: 1,

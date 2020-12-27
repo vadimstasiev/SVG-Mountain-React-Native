@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import {Text} from 'native-base';
+import {Content, Text} from 'native-base';
 import ColorPalette from 'react-native-color-palette';
 
 import auth from "@react-native-firebase/auth";
@@ -31,6 +31,7 @@ import Svg, {
   Pattern,
   Mask,
 } from "react-native-svg";
+import LoadingScreen from "./LoadingScreen";
 
 let db = firestore();
 
@@ -452,6 +453,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       '#3a402a':'Terrible'
    }
 
+   const [initializing, setInitializing] = useState(true)
 
    const clickPolygon = (polygon) =>{
       navigation.navigate('Notes', {user, dayNum: polygon.id, monthSvgScreen, moods, defaultMood, colorOptions})
@@ -459,13 +461,15 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
 
    useEffect(() => {
       let unsubscribe = () => {};
+      setInitializing(true);
       try {
-         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
+         unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(async querySnapshot=>{
+            await setInitializing(true);
             let tempSvgData = {};
             querySnapshot.forEach(doc =>{
                tempSvgData[doc.id]=doc.data()
             })
-            setPolygons(polygons.map(polygon => {
+            await setPolygons(polygons.map(polygon => {
                let firestorePolygon = tempSvgData[polygon.id]
                if(firestorePolygon) {
                   return {
@@ -479,6 +483,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                }
                return polygon;
             }))
+            await setInitializing(false);
          })
          // setPolygons(polygons.map(polygon => {
          //       return {
@@ -496,14 +501,17 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       } catch (error) {
          console.log('Firestore error', error);
       }
-      console.log('hello')
       return () => {
          unsubscribe()
       }
    }, [])
 
+   if (initializing) return <View style={styles.loadingContainer}>
+      <LoadingScreen backgroundColor={'white'} color={'#6aab6a'}/>
+   </View>
+
    return (
-      <View style={styles.container}>
+      <View style={styles.container}>         
          <Svg  
          viewBox="0 -50 1023 1350" preserveAspectRatio={"none"}>
 
@@ -533,11 +541,20 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
    }
 
    const styles = StyleSheet.create({
+   loadingContainer: {
+      flex: 1,
+      margin:0,
+      justifyContent: 'center',
+      paddingTop: 10,
+      backgroundColor: 'white',
+      padding: 8,
+      height:700
+   },
    container: {
       flex: 1,
       justifyContent: 'center',
       paddingTop: 10,
-      backgroundColor: '#ecf0f1',
+      backgroundColor: 'white',
       padding: 8,
       height:550
    },

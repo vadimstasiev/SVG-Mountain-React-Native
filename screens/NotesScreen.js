@@ -6,6 +6,7 @@ import ColorPalette from 'react-native-color-palette';
 import auth, { firebase } from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
 // import { NavigationActions, StackActions } from 'react-navigation';
+import LoadingScreen from "./LoadingScreen";
 
 
 import Svg, {
@@ -48,6 +49,9 @@ const HabitCheckBox = ({habit, toggleChecked, checked}) => {
 
 const Notes = ({route, navigation}) => {
    const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = route.params;
+
+   const [initializing, setInitializing] = useState(true)
+
    
    const [input, setInput] = useState('');
    const [firestoreInput, setFirestoreInput] = useState();
@@ -114,8 +118,10 @@ const Notes = ({route, navigation}) => {
    useEffect(() => {
       navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
       let unsubscribeDay = () => {};
+      setInitializing(true);
       try {
          unsubscribeDay = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).onSnapshot( async querySnapshot=>{
+            await setInitializing(true);
             let data = await querySnapshot.data()
             if (data){
                setFirestoreInput(data.message);
@@ -127,14 +133,17 @@ const Notes = ({route, navigation}) => {
                }
                setHabitsChecked(data.habitsChecked || [])
             }
+            setInitializing(false);
          })
       } catch (error) {
          console.log('Firestore error', error);
+         setInitializing(false);
       }
 
       let unsubscribeHabbits = () => {};
       try {
          unsubscribeHabbits = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
+            await setInitializing(true);
             let data = await querySnapshot.data();
             let firebaseHabits = [];
             if (data) {
@@ -143,15 +152,18 @@ const Notes = ({route, navigation}) => {
                   firebaseHabits.push({id, name});
                }
             setSortHabbits(firebaseHabits);
+            setInitializing(false);
          }
          })
       } catch (error) {
          console.log('Firestore error', error);
+         setInitializing(false);
       }
 
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
          submit();
       })
+      setInitializing(false);
       return () => {
          unsubscribeDay();
          unsubscribeHabbits();
@@ -159,6 +171,10 @@ const Notes = ({route, navigation}) => {
       }
    }, [firestoreInput, firestoreMood]);
  
+
+   if (initializing) return <View style={styles.loadingContainer}>
+      <LoadingScreen backgroundColor={'white'} color={'#6aab6a'}/>
+   </View>
 
    return <Container>
          <Header>
@@ -238,17 +254,16 @@ const Notes = ({route, navigation}) => {
    </Container>
 }
 
-// const styles = StyleSheet.create({
-//    textAreaContainer: {
-//      borderColor: 'grey',
-//      borderWidth: 1,
-//      padding: 5
-//    },
-//    textArea: {
-//      height: 150,
-//      justifyContent: "flex-start",
-//      textAlignVertical: 'top'
-//    }
-//  })
+const styles = StyleSheet.create({
+   loadingContainer: {
+      flex: 1,
+      margin:0,
+      justifyContent: 'center',
+      paddingTop: 10,
+      backgroundColor: 'white',
+      padding: 8,
+      height:700
+   },
+ })
 
 export default Notes;
