@@ -36,22 +36,15 @@ let db = firestore();
 
 
 const Mountain = ({navigation, route, user, monthSvgScreen}) => {
-  // TODOS
-  // check how many days the month has
-  // render the day based on the number of months (remove polygons if necessary)
-  // create the mood - color array
-
-   // const { user } = route.params;
-   // const monthSvgScreen = 'January21';
    const defaultColor = "#fff";
-   const colorOptions = ['#C0392B', '#E74C3C', '#9B59B6', '#8E44AD', '#2980B9'];
+   const colorOptions = ['#3a402a', '#688052', '#6aab6a', '#d9b358', '#fff2a7'];
    let defaultMood = 'None';
    const moods = {
-      '#2980B9':'Perfect',
-      '#8E44AD':'Good',
-      '#9B59B6':'Average',
-      '#E74C3C':'Bad',
-      '#C0392B':'Terrible'
+      '#fff2a7':'Awesome',
+      '#d9b358':'Good',
+      '#6aab6a':'Fine',
+      '#688052':'Bad',
+      '#3a402a':'Terrible'
    }
 
 
@@ -465,30 +458,6 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       navigation.navigate('Notes', {user, dayNum: polygon.id, monthSvgScreen, moods, defaultMood, colorOptions})
    }
 
-   // const markComplete=(id, color)=>{
-   //    console.log('doc.id: ', id, 'mood: ', color)
-   //    setPolygons([...polygons.map(polygon => String(polygon.id)===String(id)?polygon:{...polygon, fill: color})]);
-   // }
-
-   // const updateMountain=()=>{
-   //    const polygonData = snapshotData;
-   //    setPolygons(
-   //       [...polygons.map(polygon => {
-   //          // console.log('here', polygon.id, id)
-   //          // String(polygon.id)===id?console.log(here,polygon):null;
-   //          return String(polygon.id)!==String(id)?polygon:
-   //          {...polygon,
-   //             fill: color,
-   //             day: {
-   //                x:polygon.day.x,
-   //                y:polygon.day.y,
-   //                fill: "white"
-   //             }
-   //          }
-   //       })
-   //       ]);
-   // }
-
    useEffect(() => {
       let unsubscribe = () => {};
       try {
@@ -496,13 +465,6 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(querySnapshot=>{
             let tempSvgData = {};
             querySnapshot.forEach(doc =>{
-               // let data = (
-                  //    snapshotData.filter(data => data.id!==doc.id),
-                  //    {id:doc.id, fill: Object.keys(moods).find(key => moods[key] === doc.data()["mood"])});
-                  // console.log(doc.id)
-                  // console.log({...firestoreSvgData,
-                  //    [doc.id]:doc.data()
-                  // })
                   tempSvgData[doc.id]=doc.data()
                })
                setFirestoreSvgData(tempSvgData);
@@ -525,11 +487,6 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
          } catch (error) {
             console.log('Firestore error', error);
          }
-            
-         // console.log('firestoreSvgData', firestoreSvgData)
-         // markComplete(13, '#9B59B6');
-         // markComplete(31, '#9B59B6');
-         // console.log('helloasasda', snapshotData);
          return () => {
             unsubscribe()
          }
@@ -537,9 +494,8 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
 
    return (
       <View style={styles.container}>
-         <Svg
-         // height="80%"
-         viewBox="0 0 1023 1284.5">
+         <Svg  
+         viewBox="0 0 1023 1300" preserveAspectRatio={"none"}>
 
             {polygons.map((polygon) => <G key={polygon.id}>
                <Path
@@ -551,7 +507,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                <SvgText
                x={polygon.day.x}
                y={polygon.day.y}
-               fill={polygon.day.fill}
+               fill={polygon.fill==='#fff2a7'?'black':polygon.day.fill}
                fontSize="50"
                fontWeight="bold"
                textAnchor="middle">
