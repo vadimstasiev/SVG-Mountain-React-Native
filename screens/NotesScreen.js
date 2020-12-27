@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet, TextInput } from "react-native";
-import { Container, Header, Text, Form, Textarea, Button, Item, Label, Input, Content, Icon, Footer, FooterTab} from "native-base";
+import { Container, Header, Body, Text, Form, Textarea, Button, Item, Label, Input, Content, ListItem, CheckBox, Icon, Footer, FooterTab} from "native-base";
 import ColorPalette from 'react-native-color-palette';
 
 import auth, { firebase } from "@react-native-firebase/auth";
@@ -34,6 +34,17 @@ import { sub } from "react-native-reanimated";
 
 let db = firestore();
 
+
+const HabitCheckBox = ({habit, toggleChecked, checked}) => {
+   // const [isChecked, setIsChecked] = useState(false);
+   return <ListItem>
+      <CheckBox onPress={()=>toggleChecked(habit.id, checked)} checked={checked} color={'green'}/>
+      <Body>
+         <Text>{habit.name}</Text>
+      </Body>
+   </ListItem>
+}
+
 const Notes = ({route, navigation}) => {
    const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = route.params;
    
@@ -45,14 +56,41 @@ const Notes = ({route, navigation}) => {
    const [mood, setMood] = useState(defaultMood);
    const [firestoreMood, setFirestoreMood] = useState();
 
+   const [habits, setHabits] = useState([]);
+   const [habitsChecked, setHabitsChecked] = useState([]);
    
-   
+   const setSortHabbits = (inputHabbits) => {
+      // var temp = habits.slice(0);
+      setHabits([...inputHabbits.sort((a,b) => {
+         var x = a.id.toLowerCase();
+         var y = b.id.toLowerCase();
+         return x < y ? -1 : x > y ? 1 : 0;
+      })])
+  }
+
+   const habitToggleChecked = (id, checked) => {
+      if(checked){
+         temp = habitsChecked;
+         for (let i = temp.length - 1; i >= 0; i--) {
+            if (temp[i] === id) {
+               temp.splice(i, 1);
+            }
+         }
+         setHabitsChecked(temp);
+      } else {
+         if(!habitsChecked.includes(id)){
+            habitsChecked.push(id);
+         }
+      }
+      submit();
+   }
 
    const submit = (submitMood=mood) => {
       console.log(user.uid, monthSvgScreen, dayNum)
       db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
          message: input,
-         mood: submitMood
+         mood: submitMood, 
+         habitsChecked: habitsChecked
       })
       .catch((error) => {
          console.error("Error adding document: ", error);
@@ -72,8 +110,8 @@ const Notes = ({route, navigation}) => {
                console.log(mood)
                if(mood === defaultMood){
                   setMood(data.mood);
-                  
                }
+               setHabitsChecked(data.habitsChecked || [])
             }
          })
       } catch (error) {
@@ -83,24 +121,14 @@ const Notes = ({route, navigation}) => {
       let unsubscribeHabbits = () => {};
       try {
          unsubscribeHabbits = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
-            let data = await querySnapshot.data()
-            let firebaseHabits = []
-             console.log('data', data)
+            let data = await querySnapshot.data();
+            let firebaseHabits = [];
             if (data) {
                for (const id in data) {
                   const name = data[id];
-                  // console.log('here', id, name)
-                  firebaseHabits.push({id, name})
+                  firebaseHabits.push({id, name});
                }
-            // habits.map((habit) => {
-            //    firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
-            // })
-            let localHabbits;
-            firebaseHabits.map((habit) => {
-               localHabbits = habits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
-            })
-            console.log(firebaseHabits)
-            setSortHabbits([...habits, ...firebaseHabits]);
+            setSortHabbits(firebaseHabits);
          }
          })
       } catch (error) {
@@ -130,37 +158,50 @@ const Notes = ({route, navigation}) => {
                }}>Write about your day</Text>
         </Header>
       <Content padder>
-      <Form>
-         <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={()=>submit()}
-         bordered placeholder="" />
-         {/* <View style={styles.textAreaContainer} >
-            <TextInput
-               style={styles.textArea}
-               underlineColorAndroid="transparent"
-               placeholder="Type something"
-               placeholderTextColor="grey"
-               numberOfLines={10}
-               multiline={true}
-               onChangeText={setInput} value={input} onEndEditing={submit}
-            />
-         </View> */}
-         <Text style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 18,
-            marginTop: 0,
-            width: 200,
-         }}>{mood}</Text>
-         <ColorPalette
-               onChange={ color => {
-                  setMood(moods[color]);
-                  submit(moods[color]);
-               }}
-               value={Object.keys(moods).find(key => moods[key] === mood)}
-               colors={colorOptions}
-               titleStyles={{display:"none"}}
-            />
-      </Form>
+         <Form>
+            <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={()=>submit()}
+            bordered placeholder="" />
+            {/* <View style={styles.textAreaContainer} >
+               <TextInput
+                  style={styles.textArea}
+                  underlineColorAndroid="transparent"
+                  placeholder="Type something"
+                  placeholderTextColor="grey"
+                  numberOfLines={10}
+                  multiline={true}
+                  onChangeText={setInput} value={input} onEndEditing={submit}
+               />
+            </View> */}
+            <Text style={{
+               textAlign: 'center',
+               fontWeight: 'bold',
+               fontSize: 18,
+               marginTop: 0,
+               width: "100%",
+            }}>{mood}</Text>
+            <ColorPalette
+                  onChange={ color => {
+                     setMood(moods[color]);
+                     submit(moods[color]);
+                  }}
+                  value={Object.keys(moods).find(key => moods[key] === mood)}
+                  colors={colorOptions}
+                  titleStyles={{display:"none"}}
+               />
+         </Form>
+         <Content>
+            <Text style={{
+               textAlign: 'center',
+               // fontWeight: 'bold',
+               fontSize: 18,
+               marginTop: 0,
+               // width: "100%",
+            }}>{habits.length>0?'Habits Performed':''}</Text>
+            {habits.map((habit) => {
+               return <HabitCheckBox key={habit.id} habit={habit} toggleChecked={habitToggleChecked} checked={habitsChecked.includes(String(habit.id))}/>
+            })}
+            
+         </Content>
       </Content>
    </Container>
 }
