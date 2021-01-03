@@ -109,21 +109,24 @@ class LoginScreen extends Component {
             } 
         });
 
-        await auth().signInWithEmailAndPassword(this['email'].value(), this['password'].value())
-            .then(() => {
-                this.navigation.navigate('Home');
-            })
-            .catch((error) => {
-                if (error.code === 'auth/user-not-found') {
-                    errors['email'] = 'Email not found';
+        if(Object.keys(errors).length === 0){
+            await auth().signInWithEmailAndPassword(this['email'].value(), this['password'].value())
+                .then(() => {
+                    this.navigation.navigate('Home');
+                })
+                .catch((error) => {
+                    if (error.code === 'auth/user-not-found') {
+                        errors['email'] = 'Email not found';
+                    }
+                    
+                    if (error.code === 'auth/wrong-password') {
+                        errors['password'] = "Wrong Password";
+                    }
+                    console.log(error.code);
                 }
-                
-                if (error.code === 'auth/wrong-password') {
-                    errors['password'] = "Wrong Password";
-                }
-                console.log(error.code);
-            });
-
+            );
+        }
+        
         this.setState({ errors });
     }
 
