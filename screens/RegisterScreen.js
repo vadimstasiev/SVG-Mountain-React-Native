@@ -43,9 +43,7 @@ class RegisterScreen extends Component {
  
     constructor(props) {
         super(props);
-
         this.navigation = props.navigation;
-
         this.onFocus = this.onFocus.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onChangeText = this.onChangeText.bind(this);
@@ -55,16 +53,12 @@ class RegisterScreen extends Component {
         this.onSubmitConfirmPassword = this.onSubmitConfirmPassword.bind(this);
         this.onAccessory1Press = this.onAccessory1Press.bind(this);
         this.onAccessory2Press = this.onAccessory2Press.bind(this);
-
         this.firstnameRef = this.updateRef.bind(this, 'firstname');
         this.emailRef = this.updateRef.bind(this, 'email');
         this.passwordRef = this.updateRef.bind(this, 'password');
         this.confirmPasswordRef = this.updateRef.bind(this, 'confirmPassword');
-
-
         this.renderPasswordAccessory1 = this.renderPasswordAccessory1.bind(this);
         this.renderPasswordAccessory2 = this.renderPasswordAccessory2.bind(this);
-
         this.state = {
         secureTextEntry1: true,
         secureTextEntry2: true,
@@ -73,15 +67,12 @@ class RegisterScreen extends Component {
 
     onFocus() {
         let { errors = {} } = this.state;
-
         for (let name in errors) {
         let ref = this[name];
-
         if (ref && ref.isFocused()) {
             delete errors[name];
         }
         }
-
         this.setState({ errors });
     }
 
@@ -234,8 +225,6 @@ class RegisterScreen extends Component {
                 title='Used name within the app'
                 error={errors.firstname}
                 />
-
-
                 <TextField
                 ref={this.emailRef}
                 keyboardType='email-address'
@@ -249,7 +238,6 @@ class RegisterScreen extends Component {
                 label='Email Address'
                 error={errors.email}
                 />
-
                 <TextField
                 ref={this.passwordRef}
                 secureTextEntry={secureTextEntry1}
@@ -268,7 +256,6 @@ class RegisterScreen extends Component {
                 characterRestriction={40}
                 renderRightAccessory={this.renderPasswordAccessory1}
                 />
-
                 <TextField
                 ref={this.confirmPasswordRef}
                 secureTextEntry={secureTextEntry2}
@@ -287,9 +274,7 @@ class RegisterScreen extends Component {
                 characterRestriction={40}
                 renderRightAccessory={this.renderPasswordAccessory2}
                 />
-
             </View>
-
             <View style={styles.buttonContainer}>
                 <RaisedTextButton
                 onPress={this.onSubmit}

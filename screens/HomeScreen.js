@@ -1,16 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
-import { Container, Header, Text, Form, Button, Item, Label, Input, Content, Icon, Footer, FooterTab } from "native-base";
+import { Container, Text, Button, Content, Footer, FooterTab } from "native-base";
 import auth from "@react-native-firebase/auth";
-import firestore from "@react-native-firebase/firestore";
 
 
 import InitialLogoScreen from './InitialLogoScreen';
 import MountainScreen from './MountainScreen';
 import HabitsScreen from './HabitsScreen';
-import LoadingScreen from "./LoadingScreen";
 
-let db = firestore();
 
 const HomeScreen = (props) => {
 
@@ -20,6 +17,8 @@ const HomeScreen = (props) => {
   // Set an initializing state whilst Firebase connects
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
+
+  // In this section screens are handled differently as we want to keep the same footer for both screens
   const [screen, setScreen] = useState('Mood');
 
 
@@ -28,7 +27,6 @@ const HomeScreen = (props) => {
     if(user){
       setUser(user);
       await auth().currentUser.reload();
-      // console.log(user)
     }
     if (initializing) setInitializing(false);
   }
@@ -36,7 +34,6 @@ const HomeScreen = (props) => {
   const signOut =()=>{
     auth().signOut().then(() => {
       // Sign-out successful.
-      console.log("Sign-out successful");
       setUser(undefined);
     })
   }
@@ -47,8 +44,6 @@ const HomeScreen = (props) => {
   }, [user, screen]);
   
   if (initializing) return <InitialLogoScreen/>; 
-  
-  // return <LoadingScreen backgroundColor={'blue'}/>; 
 
   
   return (

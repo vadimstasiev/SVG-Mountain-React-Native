@@ -27,13 +27,9 @@ const LoadingScreen = ({backgroundColor='#d35400', color='red'}) => {
 
     return (
       <View style={styles.container}>
-        {/* <Spinner style={styles.spinner} isVisible={state.isVisible} size={state.size} type={type} color={state.color}/> */}
-        {/* types: ['CircleFlip', 'Bounce', 'Wave', 'WanderingCubes', 'Pulse', 'ChasingDots', 'ThreeBounce', 'Circle', '9CubeGrid', 'WordPress', 'FadingCircle', 'FadingCircleAlt', 'Arc', 'ArcAlt'], */}
         <Spinner style={styles.spinner} isVisible={true} size={100} type={'Circle'} color={color}/>
       </View>
     );
-
-
 }
 
 

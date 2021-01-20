@@ -38,41 +38,31 @@ let styles = {
 };
 
 class LoginScreen extends Component {
- 
     constructor(props) {
         super(props);
         this.navigation = props.navigation;
-
         this.onFocus = this.onFocus.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onChangeText = this.onChangeText.bind(this);
         this.onSubmitEmail = this.onSubmitEmail.bind(this);
         this.onSubmitPassword = this.onSubmitPassword.bind(this);
         this.onAccessoryPress = this.onAccessoryPress.bind(this);
-
         this.emailRef = this.updateRef.bind(this, 'email');
         this.passwordRef = this.updateRef.bind(this, 'password');
-
-
         this.renderPasswordAccessory = this.renderPasswordAccessory.bind(this);
-
         this.state = {
         secureTextEntry: true,
-     
         };
     }
 
     onFocus() {
         let { errors = {} } = this.state;
-
         for (let name in errors) {
         let ref = this[name];
-
         if (ref && ref.isFocused()) {
             delete errors[name];
         }
         }
-
         this.setState({ errors });
     }
 
@@ -100,7 +90,6 @@ class LoginScreen extends Component {
 
     async onSubmit() {
         let errors = {};
-
         ['email', 'password']
         .forEach((name) => {
             let value = this[name].value();
@@ -108,7 +97,6 @@ class LoginScreen extends Component {
                 errors[name] = 'Should not be empty';
             } 
         });
-
         if(Object.keys(errors).length === 0){
             await auth().signInWithEmailAndPassword(this['email'].value(), this['password'].value())
                 .then(() => {
@@ -118,11 +106,9 @@ class LoginScreen extends Component {
                     if (error.code === 'auth/user-not-found') {
                         errors['email'] = 'Email not found';
                     }
-                    
                     if (error.code === 'auth/wrong-password') {
                         errors['password'] = "Wrong Password";
                     }
-                    console.log(error.code);
                 }
             );
         }
@@ -153,7 +139,7 @@ class LoginScreen extends Component {
     }
 
     render() {
-        let { errors = {}, secureTextEntry, ...data } = this.state;
+        let { errors = {}, secureTextEntry } = this.state;
 
         return (
         <SafeAreaView style={styles.safeContainer}>
@@ -194,7 +180,6 @@ class LoginScreen extends Component {
                 characterRestriction={40}
                 renderRightAccessory={this.renderPasswordAccessory}
                 />
-
             </View>
             <View style={styles.buttonContainer}>
                 <RaisedTextButton

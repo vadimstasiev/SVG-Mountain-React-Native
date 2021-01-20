@@ -1,35 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, StyleSheet } from "react-native";
-import {Content, Text} from 'native-base';
-import ColorPalette from 'react-native-color-palette';
-
-import auth from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
-
-
-
 import Svg, {
-  Circle,
-  Ellipse,
   G,
-  TSpan,
-  TextPath,
   Path,
   Text as SvgText,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
 } from "react-native-svg";
 import LoadingScreen from "./LoadingScreen";
 
@@ -464,7 +439,6 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       setInitializing(true);
       try {
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).onSnapshot(async querySnapshot=>{
-            // await setInitializing(true);
             let tempSvgData = {};
             querySnapshot.forEach(doc =>{
                tempSvgData[doc.id]=doc.data()
@@ -483,21 +457,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                }
                return polygon;
             }))
-            // await setInitializing(false);
-         })
-         // setPolygons(polygons.map(polygon => {
-         //       return {
-         //          ...polygon,
-         //          fill: '#fff',
-         //          day: {
-         //             ...polygon.day,
-         //             fill: "black"
-         //          }
-         //       }
-         // }))
-
-
-         
+         })        
       } catch (error) {
          console.log('Firestore error', error);
       }
@@ -507,6 +467,7 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       }
    }, [])
 
+   // show loading screen while the data hasn't loaded
    if (initializing) return <View style={styles.loadingContainer}>
       <LoadingScreen backgroundColor={'white'} color={'#6aab6a'}/>
    </View>
@@ -515,7 +476,6 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
       <View style={styles.container}>         
          <Svg  
          viewBox="0 -50 1023 1350" preserveAspectRatio={"none"}>
-
             {polygons.map((polygon) => <G key={polygon.id}>
                <Path
                {...polygon}
@@ -526,7 +486,6 @@ const Mountain = ({navigation, route, user, monthSvgScreen}) => {
                <SvgText
                x={polygon.day.x}
                y={polygon.day.y}
-               // fill={polygon.fill==='#fff2a7'?'black':polygon.fill===defaultColor?'black':'white'}
                fill={'black'}
                fontSize="50"
                fontWeight="bold"

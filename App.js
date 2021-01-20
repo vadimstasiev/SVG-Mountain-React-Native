@@ -23,6 +23,7 @@ const Stack = createStackNavigator();
 const App = () => {
 
   return (
+    // The navigation container contains all the navigation routes for the react native navigation
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Home"  screenOptions={{title: 'JournaliZZe'}}>
           <Stack.Screen name="Home">
@@ -34,9 +35,6 @@ const App = () => {
           <Stack.Screen name="Register">
             {props => <RegisterScreen {...props} extraData={{}} />}
           </Stack.Screen>
-          {/* <Stack.Screen name="Mountain">
-            {props => <MountainScreen {...props} extraData={{}} />}
-          </Stack.Screen> */}
           <Stack.Screen name="Notes">
             {props => <NotesScreen {...props} extraData={{}} />}
           </Stack.Screen>

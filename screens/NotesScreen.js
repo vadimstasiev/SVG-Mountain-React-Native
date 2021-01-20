@@ -1,44 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, StyleSheet, TextInput, Alert } from "react-native";
-import { Container, Header, Body, Text, Form, Textarea, Button, Item, Label, Input, Content, ListItem, CheckBox, Icon, Footer, FooterTab} from "native-base";
+import { View, StyleSheet, Alert } from "react-native";
+import { Container, Header, Body, Text, Form, Textarea, Button, Content, ListItem, CheckBox, Footer, FooterTab} from "native-base";
 import ColorPalette from 'react-native-color-palette';
 
-import auth, { firebase } from "@react-native-firebase/auth";
+import { firebase } from "@react-native-firebase/auth";
 import firestore from "@react-native-firebase/firestore";
-// import { NavigationActions, StackActions } from 'react-navigation';
 import LoadingScreen from "./LoadingScreen";
-
-
-import Svg, {
-  Circle,
-  Ellipse,
-  G,
-  TSpan,
-  TextPath,
-  Path,
-  Text as SvgText,
-  Polygon,
-  Polyline,
-  Line,
-  Rect,
-  Use,
-  Image,
-  Symbol,
-  Defs,
-  LinearGradient,
-  RadialGradient,
-  Stop,
-  ClipPath,
-  Pattern,
-  Mask,
-} from "react-native-svg";
-import { sub } from "react-native-reanimated";
 
 let db = firestore();
 
 
+// Singular Checkbox item
 const HabitCheckBox = ({habit, toggleChecked, checked}) => {
-   // const [isChecked, setIsChecked] = useState(false);
    return <ListItem>
       <CheckBox onPress={()=>toggleChecked(habit.id, checked)} checked={checked} color={'green'}/>
       <Body>
@@ -47,32 +20,28 @@ const HabitCheckBox = ({habit, toggleChecked, checked}) => {
    </ListItem>
 }
 
+// main component
 const Notes = ({route, navigation}) => {
+   // get screen variables from the parent route, in this case, the mountain screen
    const { user, dayNum, monthSvgScreen, moods, defaultMood, colorOptions } = route.params;
-
    const [initializing, setInitializing] = useState(true)
-
-   
    const [input, setInput] = useState('');
    const [firestoreInput, setFirestoreInput] = useState();
-
-   // const [color, setColor] = useState('#C0392B');
-   
    const [mood, setMood] = useState(defaultMood);
    const [firestoreMood, setFirestoreMood] = useState();
-
    const [habits, setHabits] = useState([]);
    const [habitsChecked, setHabitsChecked] = useState([]);
    
+   // sort the habbits list before commiting it to the habits state
    const setSortHabbits = (inputHabbits) => {
-      // var temp = habits.slice(0);
       setHabits([...inputHabbits.sort((a,b) => {
          var x = a.id.toLowerCase();
          var y = b.id.toLowerCase();
          return x < y ? -1 : x > y ? 1 : 0;
       })])
-  }
+   }
 
+   // toggles item on the checkbox list and submits
    const habitToggleChecked = (id, checked) => {
       if(checked){
          temp = habitsChecked;
@@ -90,8 +59,9 @@ const Notes = ({route, navigation}) => {
       submit();
    }
 
+   // commits all the notes data to firestore
    const submit = (submitMood=mood) => {
-      console.log(user.uid, monthSvgScreen, dayNum)
+      // commit data to firestore
       db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).set({
          message: input,
          mood: submitMood, 
@@ -102,6 +72,7 @@ const Notes = ({route, navigation}) => {
       });
    }
 
+   // deletes the data for the given day from firestore
    const deleteDay = () =>{
       db.collection("users").doc(user.uid).collection(monthSvgScreen).doc(String(dayNum)).update({
          message:firebase.firestore.FieldValue.delete(),
@@ -115,6 +86,8 @@ const Notes = ({route, navigation}) => {
 
    }
 
+   // sets up subscriptions to the firstore, such that, if the data in firestore changes it will automatically 
+   // update the data on this screen as well 
    useEffect(() => {
       navigation.setOptions({ title: `JournaliZZe - ${dayNum}` })
       let unsubscribeDay = () => {};
@@ -124,15 +97,13 @@ const Notes = ({route, navigation}) => {
             let data = await querySnapshot.data()
             if (data){
                setFirestoreInput(data.message);
-               setInput(firestoreInput)
-               setFirestoreMood(data.mood)
-               console.log(mood)
+               setInput(firestoreInput);
+               setFirestoreMood(data.mood);
                if(mood === defaultMood){
                   setMood(data.mood);
                }
-               setHabitsChecked(data.habitsChecked || [])
+               setHabitsChecked(data.habitsChecked || []);
             }
-            // await setInitializing(false);
          })
       } catch (error) {
          console.log('Firestore error', error);
@@ -140,6 +111,7 @@ const Notes = ({route, navigation}) => {
 
       let unsubscribeHabbits = () => {};
       try {
+         // it is necessary to use another subscriptuon as the habits are located on a different firestore document
          unsubscribeHabbits = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
             let data = await querySnapshot.data();
             let firebaseHabits = [];
@@ -149,14 +121,15 @@ const Notes = ({route, navigation}) => {
                   firebaseHabits.push({id, name});
                }
             setSortHabbits(firebaseHabits);
-            // setInitializing(false);
          }
          })
       } catch (error) {
          console.log('Firestore error', error);
-         // setInitializing(false);
       }
 
+      // the listener name is irrelevant, but the listener itself ensures that the submit is called one last time
+      // before leaving the current screen, this ensures that if the user has typed some data on the text input
+      // and is still editing it, it will save it to firestore before leaving the page
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
          submit();
       })
@@ -169,6 +142,7 @@ const Notes = ({route, navigation}) => {
    }, [firestoreInput, firestoreMood]);
  
 
+   // show the loading screen before the data is ready to display on the current screen
    if (initializing) return <View style={styles.loadingContainer}>
       <LoadingScreen backgroundColor={'white'} color={'#6aab6a'}/>
    </View>
@@ -188,17 +162,6 @@ const Notes = ({route, navigation}) => {
          <Form>
             <Textarea rowSpan={5} onChangeText={setInput} value={input} onEndEditing={()=>submit()}
             bordered placeholder="" />
-            {/* <View style={styles.textAreaContainer} >
-               <TextInput
-                  style={styles.textArea}
-                  underlineColorAndroid="transparent"
-                  placeholder="Type something"
-                  placeholderTextColor="grey"
-                  numberOfLines={10}
-                  multiline={true}
-                  onChangeText={setInput} value={input} onEndEditing={submit}
-               />
-            </View> */}
             <Text style={{
                textAlign: 'center',
                fontWeight: 'bold',
@@ -219,10 +182,8 @@ const Notes = ({route, navigation}) => {
          <Content>
             <Text style={{
                textAlign: 'center',
-               // fontWeight: 'bold',
                fontSize: 18,
                marginTop: 0,
-               // width: "100%",
             }}>{habits.length>0?'Habits Performed':''}</Text>
             {habits.map((habit) => {
                return <HabitCheckBox key={habit.id} habit={habit} toggleChecked={habitToggleChecked} checked={habitsChecked.includes(String(habit.id))}/>
@@ -232,6 +193,7 @@ const Notes = ({route, navigation}) => {
       </Content>
       <Footer>
          <FooterTab>
+            {/* Creates an alert dialog box */}
             <Button active={true} onPress={() => Alert.alert(
                "Delete",
                "Are you sure you want to delete?",

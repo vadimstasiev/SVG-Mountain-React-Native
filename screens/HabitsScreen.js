@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   Alert
 } from "react-native";
-import { Container, Header, Content, Card, CardItem,  Body, } from 'native-base';
+import { Card, CardItem,  Body } from 'native-base';
 import Icon from "react-native-vector-icons/MaterialIcons";
 import LoadingScreen from "./LoadingScreen";
 
@@ -20,23 +20,20 @@ import { firebase } from "@react-native-firebase/auth";
 
 let db = firestore();
 
-const TodoList = (props) => {
+const HabitListItem = (props) => {
    const [isEditing, setIsEditing] = useState('false');
    const [habit, setHabit] = useState(props.habit)
    const editClicked=()=>{
       setIsEditing(!isEditing);
-      // console.log('update', props.habit.id, habit.name)
       props.editHabit(props.habit.id, habit.name);
    }
    return (
      <View style={styles.listTile}>
-      {/* <Text style={styles.title}>{props.habit.name}</Text> */}
       {isEditing?
          <Icon
             name="delete"
             size={20}
             color="red"
-            // onPress={() => props.deleteHabit(props.habit.id)}
             onPress={() => Alert.alert(
                "Delete",
                "Are you sure you want to delete?",
@@ -85,7 +82,6 @@ const TodoList = (props) => {
             name={"edit"}
             size={20}
             color="#666666"
-            // onPress={() => props.checkHabit(props.habit.id)}
             />
       </TouchableOpacity>
       :
@@ -110,26 +106,19 @@ const TodoList = (props) => {
 
 const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
 
-  const [title, setTitle] = useState("");
+   // Initalize empty array to store habits
+   const [habits, setHabits] = useState([]);
+   
+   const [initializing, setInitializing] = useState(true)
+   
+   const [title, setTitle] = useState("");
 
-
-  // Initalize empty array to store habits
-  const [habits, setHabits] = useState([]);
-
-  const [initializing, setInitializing] = useState(true)
-
-  // function to add habit object in habit list
+   // function to add habit object in habit list
   const addHabit = async () => {
       if (title.length > 0) {
          // Add habit to the list
          let sendToFirestoreHabits = {}
          let habitMessage=title;
-         // for (let habit in habits){
-         //    console.log('habit', habits[habit])
-         //    sendToFirestoreHabits[habits[habit].id]=habits[habit].name;
-         // }
-         // await setHabits([...habits, { id: Date.now(), name: title}]);
-         // clear the value of the textfield
          await db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[Date.now()]:habitMessage})
          .catch((error) => {
             db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').set({[Date.now()]:habitMessage})
@@ -146,10 +135,8 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
       }
 
   };
-
+  // function to edit habit from the habit list
   const editHabit = (id, habbitUpdate) => {
-      // setSortHabbits([...habits.filter((habit)=>habit.id!==id), { id: id, name: title}]);
-      // console.log(id, title)
       db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[id]:habbitUpdate})
       .catch((error) => {
          console.error("Error adding document: ", error);
@@ -159,11 +146,6 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
 
   // function to delete habit from the habit list
   const deleteHabit = id => {
-      // loop through habit list and return habits that don't match the id
-      // update the state using setHabits function
-      // setSortHabbits(habits.filter(habit => {
-      //    return habit.id !== id;
-      // }));
       db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').update({[id]:firebase.firestore.FieldValue.delete()})
       .catch((error) => {
          console.error("Error adding document: ", error);
@@ -171,7 +153,6 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
   };
 
   const setSortHabbits = (inputHabbits) => {
-      // var temp = habits.slice(0);
       setHabits([...inputHabbits.sort((a,b) => {
          var x = a.id.toLowerCase();
          var y = b.id.toLowerCase();
@@ -183,35 +164,27 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
       let unsubscribe = () => {};
       setInitializing(true);
       try {
+         // Get the user habits from the database and store them as local data
          unsubscribe = db.collection("users").doc(user.uid).collection(monthSvgScreen).doc('Habits').onSnapshot( async querySnapshot=>{
-            // await setInitializing(true);
             let data = await querySnapshot.data()
             let firebaseHabits = []
-             console.log('data', data)
             if (data) {
                for (const id in data) {
                   const name = data[id];
-                  // console.log('here', id, name)
                   firebaseHabits.push({id, name})
                }
-            // habits.map((habit) => {
-            //    firebaseHabits = firebaseHabits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
-            // })
             let localHabbits;
             firebaseHabits.map((habit) => {
                localHabbits = habits.filter((firebaseHabit) => firebaseHabit.id!==habit.id)
             })
-            console.log(firebaseHabits)
+            // must sort the habits so they always show in the same order, otherwise glitch occurs
             setSortHabbits([...habits, ...firebaseHabits]);
-            // await setInitializing(false);
          }
          })
       } catch (error) {
          console.log('Firestore error', error);
       }
-
       setInitializing(false);
-
       const navUnsubscribe = navigation.addListener('submitBeforeGoing', (e) => {
          submit();
       })
@@ -221,6 +194,7 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
       }
  }, []);
 
+   // Display initializing screen if the data has not loaded yet
    if (initializing) return <View style={styles.loadingContainer}>
       <LoadingScreen backgroundColor={'white'} color={'#6aab6a'}/>
    </View>
@@ -236,10 +210,9 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
         />
         <Button title="Add" color="#4050b5" onPress={() => addHabit()} />
       </View>
-
       <ScrollView >
         {habits.map(habit => (
-          <TodoList
+          <HabitListItem
             key={habit.id}
             habit={habit}
             editHabit={editHabit}
@@ -251,6 +224,8 @@ const HabitsScreen = ({navigation, user, monthSvgScreen}) => {
   );
 }
 
+
+// styles for different components
 const styles = StyleSheet.create({
    statusBar: {
       backgroundColor: "#4050b5",
