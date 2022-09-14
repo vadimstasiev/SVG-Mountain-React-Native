@@ -1,3 +1,8 @@
+# Preview
+
+![Alt Text](./IMG/output720p.gif)
+
+
 # Prerequisites
 
 - https://reactnative.dev/docs/environment-setup
